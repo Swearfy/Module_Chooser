@@ -23,6 +23,9 @@ public class ModuleChooserRootPane extends BorderPane {
 		//create panes
 		cspp = new CreateStudentProfilePane();
 		smp = new SelectModulesPane();
+		rmp = new ReserveModulesPane();
+		osp = new OverviewSelectionPane();
+		
 		
 		//create tabs with panes added
 		Tab t1 = new Tab("Create Profile", cspp);

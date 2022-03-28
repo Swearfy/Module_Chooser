@@ -51,22 +51,32 @@ public class SelectModulesPane extends VBox {
         ListView<String> unselectTerm1 = new ListView<>();
         ObservableList<String> options = FXCollections.observableArrayList();
         unselectTerm1.setItems(options);
+        unselectTerm1.setPrefSize(10000,10000);
+
 
         ListView<String> unselectTerm2 = new ListView<>();
         ObservableList<String> options2 = FXCollections.observableArrayList();
         unselectTerm2.setItems(options2);
+        unselectTerm2.setPrefSize(10000,10000);
+
 
         ListView<String> selectYearlong = new ListView<>();
         ObservableList<String> options3 = FXCollections.observableArrayList();
         selectYearlong.setItems(options3);
+        selectYearlong.setPrefSize(10000,10000);
+
 
         ListView<String> selectterm1 = new ListView<>();
         ObservableList<String> options4 = FXCollections.observableArrayList();
         selectterm1.setItems(options4);
+        selectterm1.setPrefSize(10000,10000);
+
 
         ListView<String> selectterm2 = new ListView<>();
         ObservableList<String> options5 = FXCollections.observableArrayList();
         selectterm2.setItems(options5);
+        selectterm2.setPrefSize(10000,10000);
+
 
         HBox Main = new HBox();
         Main.setAlignment(Pos.CENTER);
@@ -101,14 +111,17 @@ public class SelectModulesPane extends VBox {
         Credterm12Box.getChildren().addAll(Credterm1Box, Credterm2Box);
 
         VBox leftbox = new VBox();
-        leftbox.setSpacing(10);
         leftbox.getChildren().add(lbl_Unselct1);
         leftbox.getChildren().add(unselectTerm1);
         leftbox.getChildren().add(ButtonBOXTerm1);
+        this.setMargin(ButtonBOXTerm1, new Insets(10, 10, 10, 10));
 
         leftbox.getChildren().add(lbl_Unselct2);
         leftbox.getChildren().add(unselectTerm2);
         leftbox.getChildren().add(ButtonBOXTerm2);
+        this.setMargin(ButtonBOXTerm2, new Insets(10, 10, 10, 10));
+
+
         leftbox.prefWidthProperty().bind(this.widthProperty());
         leftbox.prefHeightProperty().bind(this.heightProperty());
 
@@ -128,7 +141,7 @@ public class SelectModulesPane extends VBox {
 
         Main.getChildren().add(rightbox);
 
-        Main.setSpacing(10);
+        Main.setSpacing(20);
         Credterm12Box.setSpacing(40);
 
         this.setMargin(Main, new Insets(10, 10, 10, 10));
