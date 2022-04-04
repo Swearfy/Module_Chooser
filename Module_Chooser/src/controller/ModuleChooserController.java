@@ -1,6 +1,5 @@
 package controller;
 
-
 import java.util.List;
 
 import javafx.collections.FXCollections;
@@ -42,13 +41,12 @@ public class ModuleChooserController {
 		rmp = view.getReserveModulesPane();
 		osp = view.getoOverviewSelectionPane();
 		mstmb = view.getModuleSelectionToolMenuBar();
-		
+
 		// add courses to combobox in create student profile pane using the
 		// generateAndGetCourses helper method below
 		cspp.addCoursesToComboBox(generateAndGetCourses());
 		// attach event handlers to view using private helper method
-		smp.addterm1modul(cspp.getSelectedCourse().getAllModulesOnCourse());
-
+		
 		this.attachEventHandlers();
 	}
 	
@@ -61,10 +59,11 @@ public class ModuleChooserController {
 		mstmb.addExitHandler(e -> System.exit(0));
 	}
 	
-
 	// event handler (currently empty), which can be used for creating a profile
 	private class CreateStudentProfileHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
+			smp.populateListView(cspp.getSelectedCourse().getAllModulesOnCourse());
+			
 
 		}
 	}

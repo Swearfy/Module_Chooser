@@ -15,7 +15,6 @@ import javafx.scene.layout.VBox;
 import model.Module;
 import model.Schedule;
 
-
 public class SelectModulesPane extends VBox {
 
     Label lbl_Unselct1, lbl_Unselct2, lbl_Selected1, lbl_Selected2, lbl_SelectYearLong, lbl_Term1, lbl_Term2,
@@ -62,7 +61,7 @@ public class SelectModulesPane extends VBox {
         // List view
         unselectTerm1 = new ListView<>();
         unselectTerm1.setPrefSize(10000, 10000);
-        
+
         // ListView<String>
         unselectTerm2 = new ListView<>();
 
@@ -152,17 +151,20 @@ public class SelectModulesPane extends VBox {
     }
 
 
-    public void addterm1modul(Collection<Module> m){
-        for (Module test : m){
-            if(test.getDelivery() == Schedule.TERM_1){
+    public void populateListView(Collection<Module> m) {
+        for (Module test : m) {
+            if (test.isMandatory() == true && test.getDelivery() == Schedule.TERM_1) {
+                selectterm1.getItems().addAll(test);
+            } else if (test.isMandatory() == true && test.getDelivery() == Schedule.TERM_2) {
+                selectterm2.getItems().addAll(test);
+            } else if (test.getDelivery() == Schedule.TERM_1) {
                 unselectTerm1.getItems().addAll(test);
-            }else if(test.getDelivery() == Schedule.TERM_2){
+            } else if (test.getDelivery() == Schedule.TERM_2) {
                 unselectTerm2.getItems().addAll(test);
-            }else{
+            } else {
                 selectYearlong.getItems().addAll(test);
             }
-            
         }
-    }   
-       
+
+    }
 }
