@@ -19,18 +19,22 @@ public class OverviewSelectionPane extends VBox{
         profile.setEditable(false);
         profile.setMouseTransparent(true);
         profile.setFocusTraversable(false);
+        profile.setPromptText("Profile will display here");
 
         TextArea txt_slcdModules = new TextArea ();
         txt_slcdModules.setPrefSize(5000, 5000);
         txt_slcdModules.setEditable(false);
         txt_slcdModules.setMouseTransparent(true);
         txt_slcdModules.setFocusTraversable(false);
+        txt_slcdModules.setPromptText("Selected Module will show here");
 
         TextArea txt_resvdModules = new TextArea ();
         txt_resvdModules.setPrefSize(5000, 5000);
         txt_resvdModules.setEditable(false);
         txt_resvdModules.setMouseTransparent(true);
         txt_resvdModules.setFocusTraversable(false);
+        txt_resvdModules.setPromptText("Reserved Module will show here");
+
 
 
 
@@ -50,10 +54,6 @@ public class OverviewSelectionPane extends VBox{
         this.setMargin(hbox, new Insets(10, 10, 10, 10));
         this.setMargin(profile, new Insets(10, 10, 10, 10));
         this.setMargin(btn_save, new Insets(10, 10, 10, 10));
-
-
-
-
 
 
     }

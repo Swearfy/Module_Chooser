@@ -53,6 +53,19 @@ public class ModuleChooserRootPane extends BorderPane {
 	public ModuleChooserMenuBar getModuleSelectionToolMenuBar() {
 		return mstmb;
 	}
+
+	public OverviewSelectionPane getoOverviewSelectionPane() {
+		return osp;
+	}
+
+	public SelectModulesPane  gSelectModulesPane() {
+		return smp;
+	}
+
+	public ReserveModulesPane  getReserveModulesPane () {
+		return rmp;
+	}
+
 	
 	//method to allow the controller to change tabs
 	public void changeTab(int index) {

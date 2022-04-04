@@ -1,5 +1,7 @@
 package view;
 
+import java.util.Collection;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -10,73 +12,70 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import model.Module;
+import model.Schedule;
+
 
 public class SelectModulesPane extends VBox {
+
+    Label lbl_Unselct1, lbl_Unselct2, lbl_Selected1, lbl_Selected2, lbl_SelectYearLong, lbl_Term1, lbl_Term2,
+            lbl_CurrentCred1, lbl_CurrentCred2;
+    Button btn_AddTerm1, btn_AddTerm2, btn_RemoveTerm1, btn_RemoveTerm2, btn_Reset, btn_Submit;
+    TextField CredTerm1, CredTerm2;
+
+    ListView<Module> unselectTerm1, unselectTerm2, selectYearlong, selectterm1, selectterm2;
 
     public SelectModulesPane() {
 
         // lables
-        Label lbl_Unselct1 = new Label("Unselected Term 1 modules");
-        Label lbl_Unselct2 = new Label("Unselected Term 2 modules");
-        Label lbl_Selected1 = new Label("Selected Term 1 Modules");
-        Label lbl_Selected2 = new Label("Selected Term 2 Modules");
-        Label lbl_SelectYearLong = new Label("Selected Year Long Modules");
-        Label lbl_Term1 = new Label("Term 1");
-        Label lbl_Term2 = new Label("Term 2");
-        Label lbl_CurrentCred1 = new Label("Current Term 1 credits");
-        Label lbl_CurrentCred2 = new Label("Current Credits Term 2");
+        lbl_Unselct1 = new Label("Unselected Term 1 modules");
+        lbl_Unselct2 = new Label("Unselected Term 2 modules");
+        lbl_Selected1 = new Label("Selected Term 1 Modules");
+        lbl_Selected2 = new Label("Selected Term 2 Modules");
+        lbl_SelectYearLong = new Label("Selected Year Long Modules");
+        lbl_Term1 = new Label("Term 1");
+        lbl_Term2 = new Label("Term 2");
+        lbl_CurrentCred1 = new Label("Current Term 1 credits");
+        lbl_CurrentCred2 = new Label("Current Credits Term 2");
 
         // Buttons
-        Button btn_AddTerm1 = new Button("Add");
-        Button btn_AddTerm2 = new Button("Add");
-        Button btn_RemoveTerm1 = new Button("Remove");
-        Button btn_RemoveTerm2 = new Button("Remove");
-        Button btn_Reset = new Button("Reset");
-        Button btn_Submit = new Button("Submit");
+        btn_AddTerm1 = new Button("Add");
+        btn_AddTerm2 = new Button("Add");
+        btn_RemoveTerm1 = new Button("Remove");
+        btn_RemoveTerm2 = new Button("Remove");
+        btn_Reset = new Button("Reset");
+        btn_Submit = new Button("Submit");
 
         // text field
-        TextField CredTerm1 = new TextField();
+        CredTerm1 = new TextField();
         CredTerm1.setMaxWidth(50);
         CredTerm1.setEditable(false);
         CredTerm1.setMouseTransparent(true);
         CredTerm1.setFocusTraversable(false);
 
-        TextField CredTerm2 = new TextField();
+        CredTerm2 = new TextField();
         CredTerm2.setMaxWidth(50);
         CredTerm2.setEditable(false);
         CredTerm2.setMouseTransparent(true);
         CredTerm2.setFocusTraversable(false);
 
         // List view
-        ListView<String> unselectTerm1 = new ListView<>();
-        ObservableList<String> options = FXCollections.observableArrayList();
-        unselectTerm1.setItems(options);
-        unselectTerm1.setPrefSize(10000,10000);
+        unselectTerm1 = new ListView<>();
+        unselectTerm1.setPrefSize(10000, 10000);
+        
+        // ListView<String>
+        unselectTerm2 = new ListView<>();
 
+        unselectTerm2.setPrefSize(10000, 10000);
 
-        ListView<String> unselectTerm2 = new ListView<>();
-        ObservableList<String> options2 = FXCollections.observableArrayList();
-        unselectTerm2.setItems(options2);
-        unselectTerm2.setPrefSize(10000,10000);
+        selectYearlong = new ListView<>();
+        selectYearlong.setPrefSize(10000, 10000);
 
+        selectterm1 = new ListView<>();
+        selectterm1.setPrefSize(10000, 10000);
 
-        ListView<String> selectYearlong = new ListView<>();
-        ObservableList<String> options3 = FXCollections.observableArrayList();
-        selectYearlong.setItems(options3);
-        selectYearlong.setPrefSize(10000,10000);
-
-
-        ListView<String> selectterm1 = new ListView<>();
-        ObservableList<String> options4 = FXCollections.observableArrayList();
-        selectterm1.setItems(options4);
-        selectterm1.setPrefSize(10000,10000);
-
-
-        ListView<String> selectterm2 = new ListView<>();
-        ObservableList<String> options5 = FXCollections.observableArrayList();
-        selectterm2.setItems(options5);
-        selectterm2.setPrefSize(10000,10000);
-
+        selectterm2 = new ListView<>();
+        selectterm2.setPrefSize(10000, 10000);
 
         HBox Main = new HBox();
         Main.setAlignment(Pos.CENTER);
@@ -121,7 +120,6 @@ public class SelectModulesPane extends VBox {
         leftbox.getChildren().add(ButtonBOXTerm2);
         this.setMargin(ButtonBOXTerm2, new Insets(10, 10, 10, 10));
 
-
         leftbox.prefWidthProperty().bind(this.widthProperty());
         leftbox.prefHeightProperty().bind(this.heightProperty());
 
@@ -151,7 +149,20 @@ public class SelectModulesPane extends VBox {
         this.getChildren().add(Main);
         this.getChildren().add(Credterm12Box);
         this.getChildren().add(ButtonResetSubBox);
-
     }
 
+
+    public void addterm1modul(Collection<Module> m){
+        for (Module test : m){
+            if(test.getDelivery() == Schedule.TERM_1){
+                unselectTerm1.getItems().addAll(test);
+            }else if(test.getDelivery() == Schedule.TERM_2){
+                unselectTerm2.getItems().addAll(test);
+            }else{
+                selectYearlong.getItems().addAll(test);
+            }
+            
+        }
+    }   
+       
 }
