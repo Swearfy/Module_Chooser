@@ -17,9 +17,8 @@ import model.Schedule;
 
 public class SelectModulesPane extends VBox {
 
-    Label lbl_Unselct1, lbl_Unselct2, lbl_Selected1, lbl_Selected2, lbl_SelectYearLong, lbl_Term1, lbl_Term2,
-            lbl_CurrentCred1, lbl_CurrentCred2;
     Button btn_AddTerm1, btn_AddTerm2, btn_RemoveTerm1, btn_RemoveTerm2, btn_Reset, btn_Submit;
+    
     TextField CredTerm1, CredTerm2;
 
     ListView<Module> unselectTerm1, unselectTerm2, selectYearlong, selectterm1, selectterm2;
@@ -27,15 +26,15 @@ public class SelectModulesPane extends VBox {
     public SelectModulesPane() {
 
         // lables
-        lbl_Unselct1 = new Label("Unselected Term 1 modules");
-        lbl_Unselct2 = new Label("Unselected Term 2 modules");
-        lbl_Selected1 = new Label("Selected Term 1 Modules");
-        lbl_Selected2 = new Label("Selected Term 2 Modules");
-        lbl_SelectYearLong = new Label("Selected Year Long Modules");
-        lbl_Term1 = new Label("Term 1");
-        lbl_Term2 = new Label("Term 2");
-        lbl_CurrentCred1 = new Label("Current Term 1 credits");
-        lbl_CurrentCred2 = new Label("Current Credits Term 2");
+        Label lbl_Unselct1 = new Label("Unselected Term 1 modules");
+        Label lbl_Unselct2 = new Label("Unselected Term 2 modules");
+        Label lbl_Selected1 = new Label("Selected Term 1 Modules");
+        Label lbl_Selected2 = new Label("Selected Term 2 Modules");
+        Label lbl_SelectYearLong = new Label("Selected Year Long Modules");
+        Label lbl_Term1 = new Label("Term 1");
+        Label lbl_Term2 = new Label("Term 2");
+        Label lbl_CurrentCred1 = new Label("Current Term 1 credits");
+        Label lbl_CurrentCred2 = new Label("Current Credits Term 2");
 
         // Buttons
         btn_AddTerm1 = new Button("Add");
@@ -150,6 +149,7 @@ public class SelectModulesPane extends VBox {
         this.getChildren().add(ButtonResetSubBox);
     }
 
+    // Populate
     public void populateUnSelectTerm1(Module m){
         unselectTerm1.getItems().addAll(m);
     }
@@ -169,40 +169,57 @@ public class SelectModulesPane extends VBox {
     public void populateSelectYearlong(Module m){
         selectYearlong.getItems().addAll(m);
     }
+      // Populate
 
-
-
-    public void getBtn1SelecAndAdd(){
-        if (unselectTerm1.getSelectionModel().getSelectedItem() != null){
-            Module m = unselectTerm1.getSelectionModel().getSelectedItem();
-            selectterm1.getItems().addAll(m);
-            unselectTerm1.getItems().remove(m);
-        }
+      // Buttons
+    public Module getTerm1UnSelection(){
+        return unselectTerm1.getSelectionModel().getSelectedItem();
     }
 
-    public void getRemove1Selec(){
-        if(selectterm1.getSelectionModel().getSelectedItem() != null){
-            Module m = selectterm1.getSelectionModel().getSelectedItem();
-            selectterm1.getItems().remove(m);
-            unselectTerm1.getItems().add(m);
-        }
-    }
-
-    public void getBtn2SelecAndAdd(){
-        if (unselectTerm2.getSelectionModel().getSelectedItem() != null){
-            Module m = unselectTerm2.getSelectionModel().getSelectedItem();
-            selectterm2.getItems().addAll(m);
-            unselectTerm2.getItems().remove(m);
-        }
+    public void AddTerm1Selection(Module m){
+        selectterm1.getItems().addAll(m);
     }
     
-    public void getRemove2Selec(){
-        if(selectterm2.getSelectionModel().getSelectedItem() != null){
-            Module m = selectterm2.getSelectionModel().getSelectedItem();
-            selectterm2.getItems().remove(m);
-            unselectTerm2.getItems().add(m);
-        }
+    public void RemoveTerm1UnSelection(Module m){
+        unselectTerm1.getItems().remove(m);
     }
+
+    public Module getTerm2UnSelection(){
+        return unselectTerm2.getSelectionModel().getSelectedItem();
+    }
+
+    public void AddTerm2Selection(Module m){
+        selectterm2.getItems().addAll(m);
+    }
+    
+    public void RemoveTerm2UnSelection(Module m){
+        unselectTerm2.getItems().remove(m);
+    }
+
+    public Module getTerm1Selection(){
+        return selectterm1.getSelectionModel().getSelectedItem();
+    }
+
+    public Module getTerm2Selection(){
+        return selectterm2.getSelectionModel().getSelectedItem();
+    }
+
+    public void RemoveTerm1Selection(Module m){
+        selectterm1.getItems().remove(m);
+    }
+
+    public void RemoveTerm2Selection(Module m){
+        selectterm2.getItems().remove(m);
+    }
+
+    public void AddTerm1UnSelection(Module m){
+        unselectTerm1.getItems().addAll(m);
+    }
+    
+    public void AddTerm2UnSelection(Module m){
+        unselectTerm2.getItems().addAll(m);
+    }
+      // Buttons
     
 
     public void addselectterm1(EventHandler<ActionEvent> handler){
