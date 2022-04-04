@@ -2,8 +2,8 @@ package view;
 
 import java.util.Collection;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -150,21 +150,74 @@ public class SelectModulesPane extends VBox {
         this.getChildren().add(ButtonResetSubBox);
     }
 
+    public void populateUnSelectTerm1(Module m){
+        unselectTerm1.getItems().addAll(m);
+    }
 
-    public void populateListView(Collection<Module> m) {
-        for (Module test : m) {
-            if (test.isMandatory() == true && test.getDelivery() == Schedule.TERM_1) {
-                selectterm1.getItems().addAll(test);
-            } else if (test.isMandatory() == true && test.getDelivery() == Schedule.TERM_2) {
-                selectterm2.getItems().addAll(test);
-            } else if (test.getDelivery() == Schedule.TERM_1) {
-                unselectTerm1.getItems().addAll(test);
-            } else if (test.getDelivery() == Schedule.TERM_2) {
-                unselectTerm2.getItems().addAll(test);
-            } else {
-                selectYearlong.getItems().addAll(test);
-            }
+    public void populateUnSelectTerm2(Module m){
+        unselectTerm2.getItems().addAll(m);
+    }
+
+    public void populateSelectTerm1(Module m){
+        selectterm1.getItems().addAll(m);
+    }
+
+    public void populateSelectTerm2(Module m){
+        selectterm2.getItems().addAll(m);
+    }
+
+    public void populateSelectYearlong(Module m){
+        selectYearlong.getItems().addAll(m);
+    }
+
+
+
+    public void getBtn1SelecAndAdd(){
+        if (unselectTerm1.getSelectionModel().getSelectedItem() != null){
+            Module m = unselectTerm1.getSelectionModel().getSelectedItem();
+            selectterm1.getItems().addAll(m);
+            unselectTerm1.getItems().remove(m);
         }
+    }
 
+    public void getRemove1Selec(){
+        if(selectterm1.getSelectionModel().getSelectedItem() != null){
+            Module m = selectterm1.getSelectionModel().getSelectedItem();
+            selectterm1.getItems().remove(m);
+            unselectTerm1.getItems().add(m);
+        }
+    }
+
+    public void getBtn2SelecAndAdd(){
+        if (unselectTerm2.getSelectionModel().getSelectedItem() != null){
+            Module m = unselectTerm2.getSelectionModel().getSelectedItem();
+            selectterm2.getItems().addAll(m);
+            unselectTerm2.getItems().remove(m);
+        }
+    }
+    
+    public void getRemove2Selec(){
+        if(selectterm2.getSelectionModel().getSelectedItem() != null){
+            Module m = selectterm2.getSelectionModel().getSelectedItem();
+            selectterm2.getItems().remove(m);
+            unselectTerm2.getItems().add(m);
+        }
+    }
+    
+
+    public void addselectterm1(EventHandler<ActionEvent> handler){
+        btn_AddTerm1.setOnAction(handler);
+    }
+
+    public void removeBtn1(EventHandler<ActionEvent> handler){
+        btn_RemoveTerm1.setOnAction(handler);
+    }
+    
+    public void addselectterm2(EventHandler<ActionEvent> handler){
+        btn_AddTerm2.setOnAction(handler);
+    }
+
+    public void removeBtn2(EventHandler<ActionEvent> handler){
+        btn_RemoveTerm2.setOnAction(handler);
     }
 }

@@ -2,6 +2,8 @@ package controller;
 
 import java.util.List;
 
+import javax.lang.model.util.ElementKindVisitor6;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
@@ -54,17 +56,70 @@ public class ModuleChooserController {
 	private void attachEventHandlers() {
 		// attach an event handler to the create student profile pane
 		cspp.addCreateStudentProfileHandler(new CreateStudentProfileHandler());
+		cspp.addCreateStudentProfileHandler(new test());
+		smp.addselectterm1(new Term1AddButtonHandler());
+		smp.removeBtn1(new Term1RemoveButtonHandler());
+		smp.addselectterm2(new Term2AddButtonHandler());
+		smp.removeBtn2(new Term2RemoveButtonHandler());
 		
 		// attach an event handler to the menu bar that closes the application
 		mstmb.addExitHandler(e -> System.exit(0));
+	}
+
+
+	private class test implements EventHandler<ActionEvent>{
+		public void handle(ActionEvent e){
+			for (Module m : cspp.getSelectedCourse().getAllModulesOnCourse()){
+				if(m.isMandatory() == true && m.getDelivery() == Schedule.TERM_1){
+					smp.populateSelectTerm1(m);
+				}else if(m.isMandatory() == true && m.getDelivery() == Schedule.TERM_2){
+					smp.populateSelectTerm2(m);
+				}else if(m.getDelivery() == Schedule.TERM_1){
+					smp.populateUnSelectTerm1(m);
+				}else if(m.getDelivery() == Schedule.TERM_2){
+					smp.populateUnSelectTerm2(m);
+				}else{
+					smp.populateSelectYearlong(m);
+				}
+			}
+				
+		}
+	}
+	
+	private class Term1AddButtonHandler implements EventHandler<ActionEvent>{
+		public void handle(ActionEvent e){
+			smp.getBtn1SelecAndAdd();
+			
+			
+		}
+	}
+
+	private class Term1RemoveButtonHandler implements EventHandler<ActionEvent>{
+		public void handle(ActionEvent e){
+			smp.getRemove1Selec();
+
+		}
+	}
+
+	
+	private class Term2AddButtonHandler implements EventHandler<ActionEvent>{
+		public void handle(ActionEvent e){
+			smp.getBtn2SelecAndAdd();
+			
+		}
+	}
+
+	private class Term2RemoveButtonHandler implements EventHandler<ActionEvent>{
+		public void handle(ActionEvent e){
+			smp.getRemove2Selec();
+
+		}
 	}
 	
 	// event handler (currently empty), which can be used for creating a profile
 	private class CreateStudentProfileHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
-			smp.populateListView(cspp.getSelectedCourse().getAllModulesOnCourse());
 			
-
 		}
 	}
 
