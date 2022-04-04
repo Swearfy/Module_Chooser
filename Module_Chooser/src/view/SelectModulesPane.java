@@ -1,7 +1,5 @@
 package view;
 
-import java.util.Collection;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -13,12 +11,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import model.Module;
-import model.Schedule;
 
 public class SelectModulesPane extends VBox {
 
     Button btn_AddTerm1, btn_AddTerm2, btn_RemoveTerm1, btn_RemoveTerm2, btn_Reset, btn_Submit;
-    
+
     TextField CredTerm1, CredTerm2;
 
     ListView<Module> unselectTerm1, unselectTerm2, selectYearlong, selectterm1, selectterm2;
