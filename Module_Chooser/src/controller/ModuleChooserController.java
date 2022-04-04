@@ -56,10 +56,12 @@ public class ModuleChooserController {
 	private void attachEventHandlers() {
 		// attach an event handler to the create student profile pane
 		cspp.addCreateStudentProfileHandler(new CreateStudentProfileHandler());
-		cspp.addCreateStudentProfileHandler(new test());
+		cspp.addCreateStudentProfileHandler(new PopulateListView());
+
 		smp.addselectterm1(new Term1AddButtonHandler());
-		smp.removeBtn1(new Term1RemoveButtonHandler());
 		smp.addselectterm2(new Term2AddButtonHandler());
+
+		smp.removeBtn1(new Term1RemoveButtonHandler());
 		smp.removeBtn2(new Term2RemoveButtonHandler());
 		
 		// attach an event handler to the menu bar that closes the application
@@ -67,7 +69,7 @@ public class ModuleChooserController {
 	}
 
 
-	private class test implements EventHandler<ActionEvent>{
+	private class PopulateListView implements EventHandler<ActionEvent>{
 		public void handle(ActionEvent e){
 			for (Module m : cspp.getSelectedCourse().getAllModulesOnCourse()){
 				if(m.isMandatory() == true && m.getDelivery() == Schedule.TERM_1){
@@ -88,38 +90,48 @@ public class ModuleChooserController {
 	
 	private class Term1AddButtonHandler implements EventHandler<ActionEvent>{
 		public void handle(ActionEvent e){
-			smp.getBtn1SelecAndAdd();
-			
-			
+			if(smp.getTerm1UnSelection() != null){
+				Module m = smp.getTerm1UnSelection();
+				smp.AddTerm1Selection(m);
+				smp.RemoveTerm1UnSelection(m);
+			}
+		}
+	}
+	private class Term2AddButtonHandler implements EventHandler<ActionEvent>{
+		public void handle(ActionEvent e){
+			if(smp.getTerm2UnSelection() != null){
+				Module m = smp.getTerm2UnSelection();
+				smp.AddTerm2Selection(m);
+				smp.RemoveTerm2UnSelection(m);
+			}
 		}
 	}
 
 	private class Term1RemoveButtonHandler implements EventHandler<ActionEvent>{
 		public void handle(ActionEvent e){
-			smp.getRemove1Selec();
-
+			if (smp.getTerm1Selection() != null){
+				Module m = smp.getTerm1Selection();
+				smp.RemoveTerm1Selection(m);
+				smp.AddTerm1UnSelection(m);
+			}
 		}
 	}
 
-	
-	private class Term2AddButtonHandler implements EventHandler<ActionEvent>{
-		public void handle(ActionEvent e){
-			smp.getBtn2SelecAndAdd();
-			
-		}
-	}
 
 	private class Term2RemoveButtonHandler implements EventHandler<ActionEvent>{
 		public void handle(ActionEvent e){
-			smp.getRemove2Selec();
-
+			if (smp.getTerm2Selection() != null){
+				Module m = smp.getTerm2Selection();
+				smp.RemoveTerm2Selection(m);
+				smp.AddTerm2UnSelection(m);
+			}
 		}
 	}
 	
 	// event handler (currently empty), which can be used for creating a profile
 	private class CreateStudentProfileHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
-			
+
 		}
 	}
 
