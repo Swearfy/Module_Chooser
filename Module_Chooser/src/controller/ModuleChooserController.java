@@ -1,14 +1,11 @@
 package controller;
 
-import java.util.List;
+import org.w3c.dom.events.Event;
 
-import javax.lang.model.util.ElementKindVisitor6;
-
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import model.Course;
 import model.Schedule;
 import model.Module;
@@ -56,74 +53,78 @@ public class ModuleChooserController {
 	private void attachEventHandlers() {
 		// attach an event handler to the create student profile pane
 		cspp.addCreateStudentProfileHandler(new CreateStudentProfileHandler());
-		cspp.addCreateStudentProfileHandler(new PopulateListView());
 
+		smp.ResetBTN(new CreateStudentProfileHandler());
+		
 		smp.addselectterm1(new Term1AddButtonHandler());
 		smp.addselectterm2(new Term2AddButtonHandler());
-
+		
 		smp.removeBtn1(new Term1RemoveButtonHandler());
 		smp.removeBtn2(new Term2RemoveButtonHandler());
+
 		
 		// attach an event handler to the menu bar that closes the application
 		mstmb.addExitHandler(e -> System.exit(0));
 	}
 
-
-	private class PopulateListView implements EventHandler<ActionEvent>{
-		public void handle(ActionEvent e){
-			for (Module m : cspp.getSelectedCourse().getAllModulesOnCourse()){
-				if(m.isMandatory() == true && m.getDelivery() == Schedule.TERM_1){
-					smp.populateSelectTerm1(m);
-				}else if(m.isMandatory() == true && m.getDelivery() == Schedule.TERM_2){
-					smp.populateSelectTerm2(m);
-				}else if(m.getDelivery() == Schedule.TERM_1){
-					smp.populateUnSelectTerm1(m);
-				}else if(m.getDelivery() == Schedule.TERM_2){
-					smp.populateUnSelectTerm2(m);
-				}else{
-					smp.populateSelectYearlong(m);
-				}
-			}
-				
-		}
-	}
-	
 	private class Term1AddButtonHandler implements EventHandler<ActionEvent>{
 		public void handle(ActionEvent e){
-			if(smp.getTerm1UnSelection() != null){
+			if(smp.GetCredTerm1() >= 60){
+				alertDialogBuilder(AlertType.INFORMATION, "Error", "60 Credits Maximum", "Reached the maximum modules/credits");
+			}else if(smp.getTerm1UnSelection() != null){
 				Module m = smp.getTerm1UnSelection();
 				smp.AddTerm1Selection(m);
 				smp.RemoveTerm1UnSelection(m);
+				smp.UpdateCredTerm1(m.getModuleCredits());
+			}else if(smp.getTerm1Selection() == null){
+				alertDialogBuilder(AlertType.ERROR, "Error","Nothing Selected", "Please select a module to add");
 			}
 		}
 	}
+	
 	private class Term2AddButtonHandler implements EventHandler<ActionEvent>{
 		public void handle(ActionEvent e){
-			if(smp.getTerm2UnSelection() != null){
+			if(smp.GetCredTerm2() >= 60){
+				alertDialogBuilder(AlertType.INFORMATION, "Error","60 Credits Maximum", "Reached the maximum modules/credits");
+			}else if(smp.getTerm2UnSelection() != null){
 				Module m = smp.getTerm2UnSelection();
 				smp.AddTerm2Selection(m);
 				smp.RemoveTerm2UnSelection(m);
+				smp.UpdateCredTerm2(m.getModuleCredits());
+			}else if(smp.getTerm2Selection() == null){
+				alertDialogBuilder(AlertType.ERROR, "Error","Nothing Selected", "Please select a module to add");
 			}
 		}
 	}
-
+	
 	private class Term1RemoveButtonHandler implements EventHandler<ActionEvent>{
 		public void handle(ActionEvent e){
-			if (smp.getTerm1Selection() != null){
+			if(smp.getTerm1Selection() == null){
+				alertDialogBuilder(AlertType.ERROR, "Error","Wrong selection", "Please select a module to remove");
+			}else if(smp.getTerm1Selection().isMandatory() == true){
+				alertDialogBuilder(AlertType.ERROR, "Error","Wrong selection", "Please Select an non mandatory module to remove");
+			}else if(smp.getTerm1Selection() != null){
 				Module m = smp.getTerm1Selection();
 				smp.RemoveTerm1Selection(m);
 				smp.AddTerm1UnSelection(m);
+				smp.DecremUpdateCredTerm1(m.getModuleCredits());
+				
 			}
 		}
 	}
-
-
+	
+	
 	private class Term2RemoveButtonHandler implements EventHandler<ActionEvent>{
 		public void handle(ActionEvent e){
-			if (smp.getTerm2Selection() != null){
+			if(smp.getTerm2Selection() == null){
+				alertDialogBuilder(AlertType.ERROR, "Error","Wrong selection", "Please select a module to remove");
+			}else if(smp.getTerm2Selection().isMandatory() == true){
+				alertDialogBuilder(AlertType.ERROR, "Error","Wrong selection", "Please Select an non mandatory module to remove");
+			}else if(smp.getTerm2Selection() != null){
 				Module m = smp.getTerm2Selection();
 				smp.RemoveTerm2Selection(m);
 				smp.AddTerm2UnSelection(m);
+				smp.DecremUpdateCredTerm2(m.getModuleCredits());
 			}
 		}
 	}
@@ -131,10 +132,34 @@ public class ModuleChooserController {
 	// event handler (currently empty), which can be used for creating a profile
 	private class CreateStudentProfileHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
-
+			smp.clearSelectedAll();
+			for (Module m : cspp.getSelectedCourse().getAllModulesOnCourse()){
+				if(m.isMandatory() == true && m.getDelivery() == Schedule.TERM_1){
+					smp.populateSelectTerm1(m);
+					smp.UpdateCredTerm1(m.getModuleCredits());
+				}else if(m.isMandatory() == true && m.getDelivery() == Schedule.TERM_2){
+					smp.populateSelectTerm2(m);
+					smp.UpdateCredTerm2(m.getModuleCredits());
+				}else if(m.getDelivery() == Schedule.TERM_1){
+					smp.populateUnSelectTerm1(m);
+				}else if(m.getDelivery() == Schedule.TERM_2){
+					smp.populateUnSelectTerm2(m);
+				}else if(m.getDelivery() == Schedule.YEAR_LONG){
+					smp.populateSelectYearlong(m);
+					smp.UpdateCredTerm1(m.getModuleCredits()/2);
+					smp.UpdateCredTerm2(m.getModuleCredits()/2);
+				}
+			}
 		}
 	}
 
+	private class SubmitModulesHandler implements EventHandler<ActionEvent>{
+		public void handle(ActionEvent e){
+			
+		}
+	}
+
+	
 	// helper method - generates course and module data and returns courses within
 	// an array
 	private Course[] generateAndGetCourses() {
@@ -200,6 +225,15 @@ public class ModuleChooserController {
 		courses[1] = softEng;
 
 		return courses;
+	}
+
+	//helper method to build dialogs
+	private void alertDialogBuilder(AlertType type, String title, String header, String content) {
+		Alert alert = new Alert(type);
+		alert.setTitle(title);
+		alert.setHeaderText(header);
+		alert.setContentText(content);
+		alert.showAndWait();
 	}
 
 }

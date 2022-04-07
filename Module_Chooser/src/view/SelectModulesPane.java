@@ -1,5 +1,7 @@
 package view;
 
+import javafx.beans.binding.Bindings;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -19,6 +21,9 @@ public class SelectModulesPane extends VBox {
     TextField CredTerm1, CredTerm2;
 
     ListView<Module> unselectTerm1, unselectTerm2, selectYearlong, selectterm1, selectterm2;
+
+    int Cred1Int, Cred2Int;
+    boolean x;
 
     public SelectModulesPane() {
 
@@ -42,13 +47,13 @@ public class SelectModulesPane extends VBox {
         btn_Submit = new Button("Submit");
 
         // text field
-        CredTerm1 = new TextField();
+        CredTerm1 = new TextField("0");
         CredTerm1.setMaxWidth(50);
         CredTerm1.setEditable(false);
         CredTerm1.setMouseTransparent(true);
         CredTerm1.setFocusTraversable(false);
 
-        CredTerm2 = new TextField();
+        CredTerm2 = new TextField("0");
         CredTerm2.setMaxWidth(50);
         CredTerm2.setEditable(false);
         CredTerm2.setMouseTransparent(true);
@@ -58,9 +63,7 @@ public class SelectModulesPane extends VBox {
         unselectTerm1 = new ListView<>();
         unselectTerm1.setPrefSize(10000, 10000);
 
-        // ListView<String>
         unselectTerm2 = new ListView<>();
-
         unselectTerm2.setPrefSize(10000, 10000);
 
         selectYearlong = new ListView<>();
@@ -68,7 +71,7 @@ public class SelectModulesPane extends VBox {
 
         selectterm1 = new ListView<>();
         selectterm1.setPrefSize(10000, 10000);
-
+        
         selectterm2 = new ListView<>();
         selectterm2.setPrefSize(10000, 10000);
 
@@ -147,91 +150,147 @@ public class SelectModulesPane extends VBox {
     }
 
     // Populate
-    public void populateUnSelectTerm1(Module m){
+    public void populateUnSelectTerm1(Module m) {
         unselectTerm1.getItems().addAll(m);
     }
 
-    public void populateUnSelectTerm2(Module m){
+    public void populateUnSelectTerm2(Module m) {
         unselectTerm2.getItems().addAll(m);
     }
 
-    public void populateSelectTerm1(Module m){
+    public void populateSelectTerm1(Module m) {
         selectterm1.getItems().addAll(m);
     }
 
-    public void populateSelectTerm2(Module m){
+    public void populateSelectTerm2(Module m) {
         selectterm2.getItems().addAll(m);
     }
 
-    public void populateSelectYearlong(Module m){
+    public void populateSelectYearlong(Module m) {
         selectYearlong.getItems().addAll(m);
     }
-      // Populate
+    // Populate
 
-      // Buttons
-    public Module getTerm1UnSelection(){
+    // Buttons
+    public Module getTerm1UnSelection() {
         return unselectTerm1.getSelectionModel().getSelectedItem();
     }
 
-    public void AddTerm1Selection(Module m){
+    public void AddTerm1Selection(Module m) {
         selectterm1.getItems().addAll(m);
     }
-    
-    public void RemoveTerm1UnSelection(Module m){
+
+    public void RemoveTerm1UnSelection(Module m) {
         unselectTerm1.getItems().remove(m);
     }
 
-    public Module getTerm2UnSelection(){
+    public Module getTerm2UnSelection() {
         return unselectTerm2.getSelectionModel().getSelectedItem();
     }
 
-    public void AddTerm2Selection(Module m){
+    public void AddTerm2Selection(Module m) {
         selectterm2.getItems().addAll(m);
     }
-    
-    public void RemoveTerm2UnSelection(Module m){
+
+    public void RemoveTerm2UnSelection(Module m) {
         unselectTerm2.getItems().remove(m);
     }
 
-    public Module getTerm1Selection(){
+    public Module getTerm1Selection() {
         return selectterm1.getSelectionModel().getSelectedItem();
     }
 
-    public Module getTerm2Selection(){
+    public Module getTerm2Selection() {
         return selectterm2.getSelectionModel().getSelectedItem();
     }
 
-    public void RemoveTerm1Selection(Module m){
+    public void RemoveTerm1Selection(Module m) {
         selectterm1.getItems().remove(m);
     }
 
-    public void RemoveTerm2Selection(Module m){
+    public void RemoveTerm2Selection(Module m) {
         selectterm2.getItems().remove(m);
     }
 
-    public void AddTerm1UnSelection(Module m){
+    public void AddTerm1UnSelection(Module m) {
         unselectTerm1.getItems().addAll(m);
     }
-    
-    public void AddTerm2UnSelection(Module m){
+
+    public void AddTerm2UnSelection(Module m) {
         unselectTerm2.getItems().addAll(m);
     }
-      // Buttons
-    
 
-    public void addselectterm1(EventHandler<ActionEvent> handler){
+    public void clearSelectedAll(){
+        unselectTerm1.getItems().clear();
+        unselectTerm2.getItems().clear();
+        selectYearlong.getItems().clear();
+        selectterm1.getItems().clear();
+        selectterm2.getItems().clear();
+        Cred1Int = 0;
+        Cred2Int = 0;
+    }
+
+    public ObservableList<Module> getTerm1UnselectedLeftOver(){
+        return unselectTerm1.getItems();
+    }
+    public ObservableList<Module> getTerm2UnselectedLeftOver(){
+        return unselectTerm2.getItems();
+    }
+
+
+
+    // Buttons
+
+    public void UpdateCredTerm1(int count) {
+        Cred1Int = Cred1Int + count;
+        CredTerm1.setText(String.valueOf(Cred1Int));
+    }
+
+    public void UpdateCredTerm2(int count) {
+        Cred2Int = Cred2Int + count;
+        CredTerm2.setText(String.valueOf(Cred2Int));
+    }
+
+    public int GetCredTerm1(){
+        return Cred1Int;
+
+    }
+    public int GetCredTerm2(){
+        return Cred2Int;
+    }
+
+    public void DecremUpdateCredTerm1(int count) {
+        Cred1Int = Cred1Int - count;
+        CredTerm1.setText(String.valueOf(Cred1Int));
+    }
+
+    public void DecremUpdateCredTerm2(int count) {
+        Cred2Int = Cred2Int - count;
+        CredTerm2.setText(String.valueOf(Cred2Int));
+    }
+
+
+    public void addselectterm1(EventHandler<ActionEvent> handler) {
         btn_AddTerm1.setOnAction(handler);
     }
 
-    public void removeBtn1(EventHandler<ActionEvent> handler){
+    public void removeBtn1(EventHandler<ActionEvent> handler) {
         btn_RemoveTerm1.setOnAction(handler);
     }
-    
-    public void addselectterm2(EventHandler<ActionEvent> handler){
+
+    public void addselectterm2(EventHandler<ActionEvent> handler) {
         btn_AddTerm2.setOnAction(handler);
     }
 
-    public void removeBtn2(EventHandler<ActionEvent> handler){
+    public void removeBtn2(EventHandler<ActionEvent> handler) {
         btn_RemoveTerm2.setOnAction(handler);
+    }
+
+    public void ResetBTN(EventHandler<ActionEvent>handler){
+        btn_Reset.setOnAction(handler);
+    }
+
+    public void SubmitBtn(EventHandler<ActionEvent>handler){
+        btn_Submit.setOnAction(handler);
     }
 }
