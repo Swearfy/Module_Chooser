@@ -1,6 +1,5 @@
 package view;
 
-import javafx.beans.binding.Bindings;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -23,7 +22,6 @@ public class SelectModulesPane extends VBox {
     ListView<Module> unselectTerm1, unselectTerm2, selectYearlong, selectterm1, selectterm2;
 
     int Cred1Int, Cred2Int;
-    boolean x;
 
     public SelectModulesPane() {
 
@@ -71,7 +69,7 @@ public class SelectModulesPane extends VBox {
 
         selectterm1 = new ListView<>();
         selectterm1.setPrefSize(10000, 10000);
-        
+
         selectterm2 = new ListView<>();
         selectterm2.setPrefSize(10000, 10000);
 
@@ -220,7 +218,7 @@ public class SelectModulesPane extends VBox {
         unselectTerm2.getItems().addAll(m);
     }
 
-    public void clearSelectedAll(){
+    public void clearSelectedAll() {
         unselectTerm1.getItems().clear();
         unselectTerm2.getItems().clear();
         selectYearlong.getItems().clear();
@@ -230,14 +228,27 @@ public class SelectModulesPane extends VBox {
         Cred2Int = 0;
     }
 
-    public ObservableList<Module> getTerm1UnselectedLeftOver(){
+    // leftover selection
+    public ObservableList<Module> getTerm1UnselectedLeftOver() {
         return unselectTerm1.getItems();
     }
-    public ObservableList<Module> getTerm2UnselectedLeftOver(){
+
+    public ObservableList<Module> getTerm2UnselectedLeftOver() {
         return unselectTerm2.getItems();
     }
 
+    // selected modules
+    public ObservableList<Module> getTerm1selectedmodules() {
+        return selectterm1.getItems();
+    }
 
+    public ObservableList<Module> getTerm2selectedmodules() {
+        return selectterm2.getItems();
+    }
+
+    public ObservableList<Module> getYearLongselectedmodules() {
+        return selectYearlong.getItems();
+    }
 
     // Buttons
 
@@ -251,11 +262,12 @@ public class SelectModulesPane extends VBox {
         CredTerm2.setText(String.valueOf(Cred2Int));
     }
 
-    public int GetCredTerm1(){
+    public int GetCredTerm1() {
         return Cred1Int;
 
     }
-    public int GetCredTerm2(){
+
+    public int GetCredTerm2() {
         return Cred2Int;
     }
 
@@ -268,7 +280,6 @@ public class SelectModulesPane extends VBox {
         Cred2Int = Cred2Int - count;
         CredTerm2.setText(String.valueOf(Cred2Int));
     }
-
 
     public void addselectterm1(EventHandler<ActionEvent> handler) {
         btn_AddTerm1.setOnAction(handler);
@@ -286,11 +297,11 @@ public class SelectModulesPane extends VBox {
         btn_RemoveTerm2.setOnAction(handler);
     }
 
-    public void ResetBTN(EventHandler<ActionEvent>handler){
+    public void ResetBTN(EventHandler<ActionEvent> handler) {
         btn_Reset.setOnAction(handler);
     }
 
-    public void SubmitBtn(EventHandler<ActionEvent>handler){
+    public void SubmitBtn(EventHandler<ActionEvent> handler) {
         btn_Submit.setOnAction(handler);
     }
 }
