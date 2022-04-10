@@ -22,7 +22,7 @@ public class CreateStudentProfilePane extends GridPane {
 	private ComboBox<Course> cboCourses;
 	private DatePicker inputDate;
 	private TextField txtFirstName, txtSurname, txtPnumber, txtEmail;
-	private Button btnCreateProfile;
+	private Button btnCreateProfile, btn_darkmode;
 
 	public CreateStudentProfilePane() {
 		// styling
@@ -56,6 +56,7 @@ public class CreateStudentProfilePane extends GridPane {
 
 		// initialise create profile button
 		btnCreateProfile = new Button("Create Profile");
+		btn_darkmode = new Button("Dark mode");
 
 		// add controls and labels to container
 		this.add(lblTitle, 0, 0);
@@ -78,6 +79,7 @@ public class CreateStudentProfilePane extends GridPane {
 
 		this.add(new HBox(), 0, 6);
 		this.add(btnCreateProfile, 1, 6);
+		this.add(btn_darkmode, 0, 0, 4, 1);
 	}
 
 	// method to allow the controller to add courses to the combobox
@@ -107,9 +109,58 @@ public class CreateStudentProfilePane extends GridPane {
 		return inputDate.getValue();
 	}
 
+	public void changeToRed1() {
+		txtPnumber.setStyle("-fx-border-color: red ");
+	}
+
+	public void changeToRed2() {
+		txtFirstName.setStyle("-fx-border-color: red ");
+	}
+
+	public void changeToRed3() {
+		txtSurname.setStyle("-fx-border-color: red ");
+	}
+
+	public void changeToRed4() {
+		txtEmail.setStyle("-fx-border-color: red ");
+	}
+
+	public void changeToRed5() {
+		inputDate.setStyle("-fx-border-color: red ");
+	}
+
+	public void clearcss1() {
+		txtPnumber.setStyle("");
+
+	}
+
+	public void clearcss2() {
+		txtFirstName.setStyle("");
+
+	}
+
+	public void clearcss3() {
+		txtSurname.setStyle("");
+
+	}
+
+	public void clearcss4() {
+		txtEmail.setStyle("");
+
+	}
+
+	public void clearcss5() {
+		inputDate.setStyle("");
+
+	}
+
 	// method to attach the create student profile button event handler
 	public void addCreateStudentProfileHandler(EventHandler<ActionEvent> handler) {
 		btnCreateProfile.setOnAction(handler);
+	}
+
+	public void darkmode(EventHandler<ActionEvent> handler) {
+		btn_darkmode.setOnAction(handler);
 	}
 
 }
