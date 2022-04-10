@@ -8,14 +8,13 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.input.KeyCombination;
 
-
 public class ModuleChooserMenuBar extends MenuBar {
 
 	private MenuItem saveItem, loadItem, aboutItem, exitItem;
 
-	public ModuleChooserMenuBar() { 
+	public ModuleChooserMenuBar() {
 
-		//temp var for menus and menu items within this MenuBar
+		// temp var for menus and menu items within this MenuBar
 		Menu menu;
 
 		menu = new Menu("_File");
@@ -28,14 +27,13 @@ public class ModuleChooserMenuBar extends MenuBar {
 		saveItem.setAccelerator(KeyCombination.keyCombination("SHORTCUT+S"));
 		menu.getItems().add(saveItem);
 
-		menu.getItems().add( new SeparatorMenuItem());
+		menu.getItems().add(new SeparatorMenuItem());
 
 		exitItem = new MenuItem("E_xit");
 		exitItem.setAccelerator(KeyCombination.keyCombination("SHORTCUT+X"));
 		menu.getItems().add(exitItem);
 
-		this.getMenus().add(menu);   
-
+		this.getMenus().add(menu);
 
 		menu = new Menu("_Help");
 
@@ -43,18 +41,19 @@ public class ModuleChooserMenuBar extends MenuBar {
 		aboutItem.setAccelerator(KeyCombination.keyCombination("SHORTCUT+A"));
 		menu.getItems().add(aboutItem);
 
-		this.getMenus().add(menu); 
+		this.getMenus().add(menu);
 	}
 
-	//these methods allow handlers to be externally attached to this menubar and used by the controller
+	// these methods allow handlers to be externally attached to this menubar and
+	// used by the controller
 	public void addSaveHandler(EventHandler<ActionEvent> handler) {
 		saveItem.setOnAction(handler);
 	}
-	
+
 	public void addLoadHandler(EventHandler<ActionEvent> handler) {
 		loadItem.setOnAction(handler);
 	}
-	
+
 	public void addAboutHandler(EventHandler<ActionEvent> handler) {
 		aboutItem.setOnAction(handler);
 	}
