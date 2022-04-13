@@ -1,9 +1,12 @@
 package controller;
 
+import java.io.*;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.stage.FileChooser;
 import model.Course;
 import model.Schedule;
 import model.Module;
@@ -72,8 +75,13 @@ public class ModuleChooserController {
 		rmp.confirmTerm1RMP(new RMPConfirmTerm1ModulesHandler());
 		rmp.confirmTerm2RMP(new RMPConfirmTerm2ModulesHandler());
 
+		mstmb.addSaveHandler(new SaveHandler());
+		mstmb.addLoadHandler(new LoadMenuHandler());
+
 		// attach an event handler to the menu bar that closes the application
 		mstmb.addExitHandler(e -> System.exit(0));
+
+		osp.saveBTN(new SaveButtonOWHandler());
 	}
 
 	// Select module pane classes
@@ -297,8 +305,8 @@ public class ModuleChooserController {
 	// Create profile pane
 	private class CreateStudentProfileHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
-			if (cspp.getStudentPnumber().isBlank() || cspp.getStudentName().getFirstName().isBlank()
-					|| cspp.getStudentName().getFamilyName().isBlank() || cspp.getStudentEmail().isBlank()
+			if (cspp.getStudentPnumber().isEmpty() || cspp.getStudentName().getFirstName().isEmpty()
+					|| cspp.getStudentName().getFamilyName().isEmpty() || cspp.getStudentEmail().isEmpty()
 					|| cspp.getStudentDate() == null) {
 
 				if (!cspp.getStudentPnumber().matches("[p P]" + "[1-9]+")) {
@@ -372,6 +380,43 @@ public class ModuleChooserController {
 	private class Darkmodehandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
 			view.getStylesheets().add(getClass().getResource("dark-theme.css").toString());
+		}
+	}
+
+	private class SaveButtonOWHandler implements EventHandler<ActionEvent> {
+		public void handle(ActionEvent e) {
+
+			FileChooser fileChooser = new FileChooser();
+			FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+			fileChooser.getExtensionFilters().add(extensionFilter);
+			File file = fileChooser.showSaveDialog(null);
+
+			try {
+				PrintWriter printWriter = new PrintWriter(file);
+
+				if (file != null) {
+					printWriter.write(
+							"Student Profile: \n" + osp.getStudentProfile() + "Selected Modules: \n"
+									+ osp.getSelectedModules()
+									+ "Reserved Modules: \n" + osp.getReservedModules());
+					printWriter.close();
+				}
+			} catch (FileNotFoundException eror) {
+				eror.printStackTrace();
+			}
+		}
+	}
+
+	private class SaveHandler implements EventHandler<ActionEvent> {
+		public void handle(ActionEvent e) {
+
+		}
+	}
+
+	private class LoadMenuHandler implements EventHandler<ActionEvent> {
+
+		public void handle(ActionEvent e) {
+
 		}
 	}
 

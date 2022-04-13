@@ -1,5 +1,7 @@
 package view;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -58,6 +60,18 @@ public class OverviewSelectionPane extends VBox {
 
     }
 
+    public String getStudentProfile() {
+        return profile.getText();
+    }
+
+    public String getSelectedModules() {
+        return txt_slcdModules.getText();
+    }
+
+    public String getReservedModules() {
+        return txt_resvdModules.getText();
+    }
+
     public void setProfile(String s) {
         profile.setText(s);
     }
@@ -68,5 +82,9 @@ public class OverviewSelectionPane extends VBox {
 
     public void setReserveModule(String s) {
         txt_resvdModules.setText(s);
+    }
+
+    public void saveBTN(EventHandler<ActionEvent> handler) {
+        btn_save.setOnAction(handler);
     }
 }
