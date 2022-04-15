@@ -75,7 +75,7 @@ public class ModuleChooserController {
 		rmp.confirmTerm1RMP(new RMPConfirmTerm1ModulesHandler());
 		rmp.confirmTerm2RMP(new RMPConfirmTerm2ModulesHandler());
 
-		mstmb.addSaveHandler(new SaveHandler());
+		mstmb.addSaveHandler(new SaveMenuHandler());
 		mstmb.addLoadHandler(new LoadMenuHandler());
 
 		// attach an event handler to the menu bar that closes the application
@@ -168,29 +168,38 @@ public class ModuleChooserController {
 				}
 
 				for (Module m : smp.getYearLongselectedmodules()) {
+					String truefalse = m.isMandatory() ? "yes" : "no";
 					selectedmodules += String.format("%s%n",
 							"Module code: " + m.getModuleCode() + ", " + " Module name: " + m.getModuleName() + ", "
-									+ " Credits: " + m.getModuleCredits() + ", " + "Mandatory Course ? "
-									+ m.isMandatory()
-									+ ", " + " Delivery: " + m.getDelivery());
+									+ " Credits: " + m.getModuleCredits() + ", " + "Mandatory Course: "
+									+ truefalse
+									+ ", " + " Delivery: "
+									+ m.getDelivery().toString().replaceAll(m.getDelivery().toString(), "Term 1")
+									+ "\n");
 					osp.setSelectModules(selectedmodules);
 				}
 
 				for (Module m : smp.getTerm1selectedmodules()) {
+					String truefalse = m.isMandatory() ? "yes" : "no";
 					selectedmodules += String.format("%s%n",
 							"Module code: " + m.getModuleCode() + ", " + " Module name: " + m.getModuleName() + ", "
-									+ " Credits: " + m.getModuleCredits() + ", " + "Mandatory Course ? "
-									+ m.isMandatory()
-									+ ", " + " Delivery: " + m.getDelivery());
+									+ " Credits: " + m.getModuleCredits() + ", " + "Mandatory Course: "
+									+ truefalse
+									+ ", " + " Delivery: "
+									+ m.getDelivery().toString().replaceAll(m.getDelivery().toString(), "Term 2")
+									+ "\n");
 					osp.setSelectModules(selectedmodules);
 				}
 
 				for (Module m : smp.getTerm2selectedmodules()) {
+					String truefalse = m.isMandatory() ? "yes" : "no";
 					selectedmodules += String.format("%s%n",
 							"Module code: " + m.getModuleCode() + ", " + " Module name: " + m.getModuleName() + ", "
-									+ " Credits: " + m.getModuleCredits() + ", " + "Mandatory Course ? "
-									+ m.isMandatory()
-									+ ", " + " Delivery: " + m.getDelivery());
+									+ " Credits: " + m.getModuleCredits() + ", " + "Mandatory Course: "
+									+ truefalse
+									+ ", " + " Delivery: "
+									+ m.getDelivery().toString().replaceAll(m.getDelivery().toString(), "Year Long")
+									+ "\n");
 					osp.setSelectModules(selectedmodules);
 				}
 
@@ -276,7 +285,9 @@ public class ModuleChooserController {
 				for (Module m : rmp.getTerm1selected()) {
 					reservemodules += String.format("%s%n",
 							"Module code: " + m.getModuleCode() + " Module name: " + m.getModuleName() + " Credits: "
-									+ m.getModuleCredits() + " Delivery: " + m.getDelivery());
+									+ m.getModuleCredits() + " Delivery: "
+									+ m.getDelivery().toString().replaceAll(m.getDelivery().toString(), "Term 1")
+									+ "\n");
 					osp.setReserveModule(reservemodules);
 				}
 			}
@@ -292,7 +303,9 @@ public class ModuleChooserController {
 				for (Module m : rmp.getTerm2selected()) {
 					reservemodules += String.format("%s%n",
 							"Module code: " + m.getModuleCode() + ", " + " Module name: " + m.getModuleName() + ", "
-									+ " Credits: " + m.getModuleCredits() + ", " + " Delivery: " + m.getDelivery());
+									+ " Credits: " + m.getModuleCredits() + ", " + " Delivery: "
+									+ m.getDelivery().toString().replaceAll(m.getDelivery().toString(), "Term 2")
+									+ "\n");
 					osp.setReserveModule(reservemodules);
 				}
 				view.changeTab(3);
@@ -350,7 +363,7 @@ public class ModuleChooserController {
 						cspp.getStudentName().getFirstName() + " " + cspp.getStudentName().getFamilyName());
 				profilestring += String.format("%s%n", "Email: " + cspp.getStudentEmail());
 				profilestring += String.format("%s%n", "Date: " + cspp.getStudentDate());
-				profilestring += String.format("%s%n", "Course: " + cspp.getSelectedCourse());
+				profilestring += String.format("%s%n", "Course: " + cspp.getSelectedCourse() + "\n");
 
 				osp.setProfile(profilestring);
 				smp.clearSelectedAll();
@@ -395,10 +408,9 @@ public class ModuleChooserController {
 				PrintWriter printWriter = new PrintWriter(file);
 
 				if (file != null) {
-					printWriter.write(
-							"Student Profile: \n" + osp.getStudentProfile() + "Selected Modules: \n"
-									+ osp.getSelectedModules()
-									+ "Reserved Modules: \n" + osp.getReservedModules());
+					printWriter.write(osp.getStudentProfile()
+							+ osp.getSelectedModules()
+							+ osp.getReservedModules());
 					printWriter.close();
 				}
 			} catch (FileNotFoundException eror) {
@@ -407,18 +419,45 @@ public class ModuleChooserController {
 		}
 	}
 
-	private class SaveHandler implements EventHandler<ActionEvent> {
-		public void handle(ActionEvent e) {
+    private class SaveMenuHandler implements EventHandler<ActionEvent> {
+        public void handle(ActionEvent e) {          
+            //save the data model
+            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("modulesObj.dat"));) {
 
-		}
-	}
+                oos.writeObject(model); //writes the model object to a file
+                oos.flush();
+                
+                alertDialogBuilder(AlertType.CONFIRMATION,"Information Dialog", "Save success", "Journey Return saved to modulesObj.dat");
+            }
+            catch (IOException ioExcep){
+                System.out.println("Error saving");
+				System.out.println(ioExcep);
 
-	private class LoadMenuHandler implements EventHandler<ActionEvent> {
+            }
+        }
+    }
 
-		public void handle(ActionEvent e) {
+    private class LoadMenuHandler implements EventHandler<ActionEvent> {
+        public void handle(ActionEvent e) {
+            //load in the data model
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("modulesObj.dat"));) {
+                
+                model = (StudentProfile) ois.readObject(); //reads the model object back from a file    
+                
+                alertDialogBuilder(AlertType.CONFIRMATION,"Information Dialog", "Load success", "Journey Return loaded from modulesObj.dat");
+            }
+            catch (IOException ioExcep){
+                System.out.println("Error loading");
+            }
+            catch (ClassNotFoundException c) {
+                System.out.println("Class Not found");
+            }    
 
-		}
-	}
+            //refresh the view
+            // outwardJourney.setJourneyDetails(model.getOutJourney());
+            // returnJourney.setJourneyDetails(model.getReturnJourney());
+        }
+    }
 
 	// helper method - generates course and module data and returns courses within
 	// an array
