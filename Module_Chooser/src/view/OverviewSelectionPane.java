@@ -73,15 +73,15 @@ public class OverviewSelectionPane extends VBox {
     }
 
     public void setProfile(String s) {
-        profile.setText(s);
+        profile.setText("Student Profile \n========"+ "\n" + s);
     }
 
     public void setSelectModules(String s) {
-        txt_slcdModules.setText(s);
+        txt_slcdModules.setText("Selected Modules \n========"+ "\n" + s);
     }
 
     public void setReserveModule(String s) {
-        txt_resvdModules.setText(s);
+        txt_resvdModules.setText("Reserved Modules \n======="+ "\n" + s);
     }
 
     public void saveBTN(EventHandler<ActionEvent> handler) {
