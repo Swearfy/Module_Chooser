@@ -80,6 +80,7 @@ public class ModuleChooserController {
 
 		// attach an event handler to the menu bar that closes the application
 		mstmb.addExitHandler(e -> System.exit(0));
+		mstmb.addAboutHandler(new AboutButtonHandler());
 
 		osp.saveBTN(new SaveButtonOWHandler());
 	}
@@ -416,6 +417,13 @@ public class ModuleChooserController {
 			} catch (FileNotFoundException eror) {
 				eror.printStackTrace();
 			}
+		}
+	}
+
+	private class AboutButtonHandler implements EventHandler<ActionEvent> {
+		public void handle(ActionEvent e) {
+			alertDialogBuilder(AlertType.INFORMATION, "Information Dialog", null,
+				"Enter your details then press create to be able to select modules for third year . \n Once you complete you can save the progress you done or the final text file.");
 		}
 	}
 
