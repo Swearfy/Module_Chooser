@@ -87,4 +87,12 @@ public class OverviewSelectionPane extends VBox {
     public void saveBTN(EventHandler<ActionEvent> handler) {
         btn_save.setOnAction(handler);
     }
+
+
+    public void clearAll() {
+        profile.clear();
+        txt_slcdModules.clear();
+        txt_resvdModules.clear();
+
+    }
 }
