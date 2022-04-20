@@ -177,7 +177,7 @@ public class ModuleChooserController {
 									+ ", " + " Delivery: "
 									+ m.getDelivery().toString().replaceAll(m.getDelivery().toString(), "Term 1")
 									+ "\n");
-									osPane.setSelectModules(selectedmodules);
+					osPane.setSelectModules(selectedmodules);
 				}
 
 				for (Module m : smPane.getTerm1selectedmodules()) {
@@ -189,7 +189,7 @@ public class ModuleChooserController {
 									+ ", " + " Delivery: "
 									+ m.getDelivery().toString().replaceAll(m.getDelivery().toString(), "Term 2")
 									+ "\n");
-									osPane.setSelectModules(selectedmodules);
+					osPane.setSelectModules(selectedmodules);
 				}
 
 				for (Module m : smPane.getTerm2selectedmodules()) {
@@ -201,7 +201,7 @@ public class ModuleChooserController {
 									+ ", " + " Delivery: "
 									+ m.getDelivery().toString().replaceAll(m.getDelivery().toString(), "Year Long")
 									+ "\n");
-									osPane.setSelectModules(selectedmodules);
+					osPane.setSelectModules(selectedmodules);
 				}
 
 				view.changeTab(2);
@@ -289,7 +289,7 @@ public class ModuleChooserController {
 									+ m.getModuleCredits() + " Delivery: "
 									+ m.getDelivery().toString().replaceAll(m.getDelivery().toString(), "Term 1")
 									+ "\n");
-									osPane.setReserveModule(reservemodules);
+					osPane.setReserveModule(reservemodules);
 				}
 			}
 		}
@@ -307,7 +307,7 @@ public class ModuleChooserController {
 									+ " Credits: " + m.getModuleCredits() + ", " + " Delivery: "
 									+ m.getDelivery().toString().replaceAll(m.getDelivery().toString(), "Term 2")
 									+ "\n");
-									osPane.setReserveModule(reservemodules);
+					osPane.setReserveModule(reservemodules);
 				}
 				view.changeTab(3);
 			}
