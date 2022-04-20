@@ -24,11 +24,11 @@ public class ModuleChooserController {
 	private ModuleChooserRootPane view;
 	private StudentProfile model;
 
-	private CreateStudentProfilePane cspp;
-	private SelectModulesPane smp;
-	private ReserveModulesPane rmp;
-	private OverviewSelectionPane osp;
-	private ModuleChooserMenuBar mstmb;
+	private CreateStudentProfilePane cspPane;
+	private SelectModulesPane smPane;
+	private ReserveModulesPane rmPane;
+	private OverviewSelectionPane osPane;
+	private ModuleChooserMenuBar mstMenuBar;
 
 	public ModuleChooserController(ModuleChooserRootPane view, StudentProfile model) {
 		// initialise view and model fields
@@ -36,15 +36,15 @@ public class ModuleChooserController {
 		this.model = model;
 
 		// initialise view subcontainer fields
-		cspp = view.getCreateStudentProfilePane();
-		smp = view.gSelectModulesPane();
-		rmp = view.getReserveModulesPane();
-		osp = view.getoOverviewSelectionPane();
-		mstmb = view.getModuleSelectionToolMenuBar();
+		cspPane = view.getCreateStudentProfilePane();
+		smPane = view.gSelectModulesPane();
+		rmPane = view.getReserveModulesPane();
+		osPane = view.getoOverviewSelectionPane();
+		mstMenuBar = view.getModuleSelectionToolMenuBar();
 
 		// add courses to combobox in create student profile pane using the
 		// generateAndGetCourses helper method below
-		cspp.addCoursesToComboBox(generateAndGetCourses());
+		cspPane.addCoursesToComboBox(generateAndGetCourses());
 		// attach event handlers to view using private helper method
 
 		this.attachEventHandlers();
@@ -53,122 +53,122 @@ public class ModuleChooserController {
 	// helper method - used to attach event handlers
 	private void attachEventHandlers() {
 		// attach an event handler to the create student profile pane
-		cspp.addCreateStudentProfileHandler(new CreateStudentProfileHandler());
-		cspp.darkmode(new Darkmodehandler());
+		cspPane.addCreateStudentProfileHandler(new CreateStudentProfileHandler());
+		cspPane.darkmode(new Darkmodehandler());
 
-		smp.ResetBTN(new CreateStudentProfileHandler());
+		smPane.ResetBTN(new CreateStudentProfileHandler());
 
-		smp.addselectterm1(new SMPTerm1AddButtonHandler());
-		smp.addselectterm2(new SMPTerm2AddButtonHandler());
+		smPane.addselectterm1(new smPaneTerm1AddButtonHandler());
+		smPane.addselectterm2(new smPaneTerm2AddButtonHandler());
 
-		smp.removeBtn1(new SMPTerm1RemoveButtonHandler());
-		smp.removeBtn2(new SMPTerm2RemoveButtonHandler());
+		smPane.removeBtn1(new smPaneTerm1RemoveButtonHandler());
+		smPane.removeBtn2(new smPaneTerm2RemoveButtonHandler());
 
-		smp.SubmitBtn(new SMPSubmitModulesHandler());
+		smPane.SubmitBtn(new smPaneSubmitModulesHandler());
 
-		rmp.addSelectTerm1RMP(new RMPTerm1AddBtnHandler());
-		rmp.addSelectTerm2RMP(new RMPTerm2AddBtnHandler());
+		rmPane.addSelectTerm1RMP(new rmPaneTerm1AddBtnHandler());
+		rmPane.addSelectTerm2RMP(new rmPaneTerm2AddBtnHandler());
 
-		rmp.removeBtn1RMP(new RMPTerm1RemoveBtnHandler());
-		rmp.removeBtn2RMP(new RMPTerm2RemoveBtnHandler());
+		rmPane.removeBtn1RMP(new rmPaneTerm1RemoveBtnHandler());
+		rmPane.removeBtn2RMP(new rmPaneTerm2RemoveBtnHandler());
 
-		rmp.confirmTerm1RMP(new RMPConfirmTerm1ModulesHandler());
-		rmp.confirmTerm2RMP(new RMPConfirmTerm2ModulesHandler());
+		rmPane.confirmTerm1RMP(new rmPaneConfirmTerm1ModulesHandler());
+		rmPane.confirmTerm2RMP(new rmPaneConfirmTerm2ModulesHandler());
 
-		mstmb.addSaveHandler(new SaveMenuHandler());
-		mstmb.addLoadHandler(new LoadMenuHandler());
+		mstMenuBar.addSaveHandler(new SaveMenuHandler());
+		mstMenuBar.addLoadHandler(new LoadMenuHandler());
 
 		// attach an event handler to the menu bar that closes the application
-		mstmb.addExitHandler(e -> System.exit(0));
-		mstmb.addAboutHandler(new AboutButtonHandler());
+		mstMenuBar.addExitHandler(e -> System.exit(0));
+		mstMenuBar.addAboutHandler(new AboutButtonHandler());
 
-		osp.saveBTN(new SaveButtonOWHandler());
+		osPane.saveBTN(new SaveButtonOWHandler());
 	}
 
 	// Select module pane classes
-	private class SMPTerm1AddButtonHandler implements EventHandler<ActionEvent> {
+	private class smPaneTerm1AddButtonHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
-			if (smp.GetCredTerm1() == 60) {
+			if (smPane.GetCredTerm1() == 60) {
 				alertDialogBuilder(AlertType.INFORMATION, "Error", "60 Credits Maximum",
 						"Reached the maximum modules/credits");
-			} else if (smp.getTerm1UnSelection() != null) {
-				Module m = smp.getTerm1UnSelection();
-				smp.AddTerm1Selection(m);
-				smp.RemoveTerm1UnSelection(m);
-				smp.UpdateCredTerm1(m.getModuleCredits());
-			} else if (smp.getTerm1Selection() == null) {
+			} else if (smPane.getTerm1UnSelection() != null) {
+				Module m = smPane.getTerm1UnSelection();
+				smPane.AddTerm1Selection(m);
+				smPane.RemoveTerm1UnSelection(m);
+				smPane.UpdateCredTerm1(m.getModuleCredits());
+			} else if (smPane.getTerm1Selection() == null) {
 				alertDialogBuilder(AlertType.ERROR, "Error", "Nothing Selected", "Please select a module to add");
 			}
 		}
 	}
 
-	private class SMPTerm2AddButtonHandler implements EventHandler<ActionEvent> {
+	private class smPaneTerm2AddButtonHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
-			if (smp.GetCredTerm2() == 60) {
+			if (smPane.GetCredTerm2() == 60) {
 				alertDialogBuilder(AlertType.INFORMATION, "Error", "60 Credits Maximum",
 						"Reached the maximum modules/credits");
-			} else if (smp.getTerm2UnSelection() != null) {
-				Module m = smp.getTerm2UnSelection();
-				smp.AddTerm2Selection(m);
-				smp.RemoveTerm2UnSelection(m);
-				smp.UpdateCredTerm2(m.getModuleCredits());
-			} else if (smp.getTerm2Selection() == null) {
+			} else if (smPane.getTerm2UnSelection() != null) {
+				Module m = smPane.getTerm2UnSelection();
+				smPane.AddTerm2Selection(m);
+				smPane.RemoveTerm2UnSelection(m);
+				smPane.UpdateCredTerm2(m.getModuleCredits());
+			} else if (smPane.getTerm2Selection() == null) {
 				alertDialogBuilder(AlertType.ERROR, "Error", "Nothing Selected", "Please select a module to add");
 			}
 		}
 	}
 
-	private class SMPTerm1RemoveButtonHandler implements EventHandler<ActionEvent> {
+	private class smPaneTerm1RemoveButtonHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
-			if (smp.getTerm1Selection() == null) {
+			if (smPane.getTerm1Selection() == null) {
 				alertDialogBuilder(AlertType.ERROR, "Error", "Wrong selection", "Please select a module to remove");
-			} else if (smp.getTerm1Selection().isMandatory() == true) {
+			} else if (smPane.getTerm1Selection().isMandatory() == true) {
 				alertDialogBuilder(AlertType.ERROR, "Error", "Wrong selection",
 						"Please Select an non mandatory module to remove");
-			} else if (smp.getTerm1Selection() != null) {
-				Module m = smp.getTerm1Selection();
-				smp.RemoveTerm1Selection(m);
-				smp.AddTerm1UnSelection(m);
-				smp.DecremUpdateCredTerm1(m.getModuleCredits());
-				rmp.reserveClearUnSelec();
+			} else if (smPane.getTerm1Selection() != null) {
+				Module m = smPane.getTerm1Selection();
+				smPane.RemoveTerm1Selection(m);
+				smPane.AddTerm1UnSelection(m);
+				smPane.DecremUpdateCredTerm1(m.getModuleCredits());
+				rmPane.reserveClearUnSelec();
 			}
 		}
 	}
 
-	private class SMPTerm2RemoveButtonHandler implements EventHandler<ActionEvent> {
+	private class smPaneTerm2RemoveButtonHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
-			if (smp.getTerm2Selection() == null) {
+			if (smPane.getTerm2Selection() == null) {
 				alertDialogBuilder(AlertType.ERROR, "Error", "Wrong selection", "Please select a module to remove");
-			} else if (smp.getTerm2Selection().isMandatory() == true) {
+			} else if (smPane.getTerm2Selection().isMandatory() == true) {
 				alertDialogBuilder(AlertType.ERROR, "Error", "Wrong selection",
 						"Please Select an non mandatory module to remove");
-			} else if (smp.getTerm2Selection() != null) {
-				Module m = smp.getTerm2Selection();
-				smp.RemoveTerm2Selection(m);
-				smp.AddTerm2UnSelection(m);
-				smp.DecremUpdateCredTerm2(m.getModuleCredits());
-				rmp.reserveClearUnSelec();
+			} else if (smPane.getTerm2Selection() != null) {
+				Module m = smPane.getTerm2Selection();
+				smPane.RemoveTerm2Selection(m);
+				smPane.AddTerm2UnSelection(m);
+				smPane.DecremUpdateCredTerm2(m.getModuleCredits());
+				rmPane.reserveClearUnSelec();
 			}
 		}
 	}
 
 	String selectedmodules = "";
 
-	private class SMPSubmitModulesHandler implements EventHandler<ActionEvent> {
+	private class smPaneSubmitModulesHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
-			rmp.reserveClearUnSelec();
-			if (smp.GetCredTerm1() < 60 || smp.GetCredTerm2() < 60) {
+			rmPane.reserveClearUnSelec();
+			if (smPane.GetCredTerm1() < 60 || smPane.GetCredTerm2() < 60) {
 				alertDialogBuilder(AlertType.ERROR, "Error", "Not Enough Credits Selected",
 						"Please select modules for both terms of 60 credits each");
-			} else if (smp.GetCredTerm1() == 60 && smp.GetCredTerm2() == 60) {
-				for (Module m : smp.getTerm1UnselectedLeftOver()) {
-					rmp.rmpPopulateUnSlctTerm1(m);
+			} else if (smPane.GetCredTerm1() == 60 && smPane.GetCredTerm2() == 60) {
+				for (Module m : smPane.getTerm1UnselectedLeftOver()) {
+					rmPane.rmpPopulateUnSlctTerm1(m);
 				}
-				for (Module m : smp.getTerm2UnselectedLeftOver()) {
-					rmp.rmpPopulateUnSlctTerm2(m);
+				for (Module m : smPane.getTerm2UnselectedLeftOver()) {
+					rmPane.rmpPopulateUnSlctTerm2(m);
 				}
 
-				for (Module m : smp.getYearLongselectedmodules()) {
+				for (Module m : smPane.getYearLongselectedmodules()) {
 					String truefalse = m.isMandatory() ? "yes" : "no";
 					selectedmodules += String.format("%s%n",
 							"Module code: " + m.getModuleCode() + ", " + " Module name: " + m.getModuleName() + ", "
@@ -177,10 +177,10 @@ public class ModuleChooserController {
 									+ ", " + " Delivery: "
 									+ m.getDelivery().toString().replaceAll(m.getDelivery().toString(), "Term 1")
 									+ "\n");
-					osp.setSelectModules(selectedmodules);
+									osPane.setSelectModules(selectedmodules);
 				}
 
-				for (Module m : smp.getTerm1selectedmodules()) {
+				for (Module m : smPane.getTerm1selectedmodules()) {
 					String truefalse = m.isMandatory() ? "yes" : "no";
 					selectedmodules += String.format("%s%n",
 							"Module code: " + m.getModuleCode() + ", " + " Module name: " + m.getModuleName() + ", "
@@ -189,10 +189,10 @@ public class ModuleChooserController {
 									+ ", " + " Delivery: "
 									+ m.getDelivery().toString().replaceAll(m.getDelivery().toString(), "Term 2")
 									+ "\n");
-					osp.setSelectModules(selectedmodules);
+									osPane.setSelectModules(selectedmodules);
 				}
 
-				for (Module m : smp.getTerm2selectedmodules()) {
+				for (Module m : smPane.getTerm2selectedmodules()) {
 					String truefalse = m.isMandatory() ? "yes" : "no";
 					selectedmodules += String.format("%s%n",
 							"Module code: " + m.getModuleCode() + ", " + " Module name: " + m.getModuleName() + ", "
@@ -201,7 +201,7 @@ public class ModuleChooserController {
 									+ ", " + " Delivery: "
 									+ m.getDelivery().toString().replaceAll(m.getDelivery().toString(), "Year Long")
 									+ "\n");
-					osp.setSelectModules(selectedmodules);
+									osPane.setSelectModules(selectedmodules);
 				}
 
 				view.changeTab(2);
@@ -210,104 +210,104 @@ public class ModuleChooserController {
 	}
 
 	// Reserve module pane
-	private class RMPTerm1AddBtnHandler implements EventHandler<ActionEvent> {
+	private class rmPaneTerm1AddBtnHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
-			if (rmp.getCTerm1() >= 30) {
+			if (rmPane.getCTerm1() >= 30) {
 				alertDialogBuilder(AlertType.INFORMATION, "Error", "30 Credits Maximum",
 						"Reached the maximum modules/credits");
-			} else if (rmp.getRmpTerm1Unselect() != null) {
-				Module m = rmp.getRmpTerm1Unselect();
-				rmp.addTerm1rmp(m);
-				rmp.removeTerm1Unselecrmp(m);
-				rmp.updateCredT1(m.getModuleCredits());
-			} else if (rmp.getRmpTerm1Unselect() == null) {
+			} else if (rmPane.getRmpTerm1Unselect() != null) {
+				Module m = rmPane.getRmpTerm1Unselect();
+				rmPane.addTerm1rmp(m);
+				rmPane.removeTerm1Unselecrmp(m);
+				rmPane.updateCredT1(m.getModuleCredits());
+			} else if (rmPane.getRmpTerm1Unselect() == null) {
 				alertDialogBuilder(AlertType.ERROR, "Error", "Nothing Selected", "Please select a module to add");
 			}
 		}
 	}
 
-	private class RMPTerm2AddBtnHandler implements EventHandler<ActionEvent> {
+	private class rmPaneTerm2AddBtnHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
-			if (rmp.getCTerm2() >= 30) {
+			if (rmPane.getCTerm2() >= 30) {
 				alertDialogBuilder(AlertType.INFORMATION, "Error", "30 Credits Maximum",
 						"Reached the maximum modules/credits");
-			} else if (rmp.getRmpTerm2Unselect() != null) {
-				Module m = rmp.getRmpTerm2Unselect();
-				rmp.addTerm2rmp(m);
-				rmp.removeTerm2Unselecrmp(m);
-				rmp.updateCredT2(m.getModuleCredits());
-			} else if (rmp.getRmpTerm2Unselect() == null) {
+			} else if (rmPane.getRmpTerm2Unselect() != null) {
+				Module m = rmPane.getRmpTerm2Unselect();
+				rmPane.addTerm2rmp(m);
+				rmPane.removeTerm2Unselecrmp(m);
+				rmPane.updateCredT2(m.getModuleCredits());
+			} else if (rmPane.getRmpTerm2Unselect() == null) {
 				alertDialogBuilder(AlertType.ERROR, "Error", "Nothing Selected", "Please select a module to add");
 			}
 		}
 	}
 
-	private class RMPTerm1RemoveBtnHandler implements EventHandler<ActionEvent> {
+	private class rmPaneTerm1RemoveBtnHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
-			if (rmp.getRmpTerm1select() == null) {
+			if (rmPane.getRmpTerm1select() == null) {
 				alertDialogBuilder(AlertType.ERROR, "Error", "Wrong selection", "Please select a module to remove");
-			} else if (rmp.getRmpTerm1select().isMandatory() == true) {
+			} else if (rmPane.getRmpTerm1select().isMandatory() == true) {
 				alertDialogBuilder(AlertType.ERROR, "Error", "Wrong selection",
 						"Please Select an non mandatory module to remove");
-			} else if (rmp.getRmpTerm1select() != null) {
-				Module m = rmp.getRmpTerm1select();
-				rmp.removeTerm1rmp(m);
-				rmp.addTerm1Unselecrmp(m);
-				rmp.DecremUpdateCredTerm1(m.getModuleCredits());
+			} else if (rmPane.getRmpTerm1select() != null) {
+				Module m = rmPane.getRmpTerm1select();
+				rmPane.removeTerm1rmp(m);
+				rmPane.addTerm1Unselecrmp(m);
+				rmPane.DecremUpdateCredTerm1(m.getModuleCredits());
 			}
 		}
 	}
 
-	private class RMPTerm2RemoveBtnHandler implements EventHandler<ActionEvent> {
+	private class rmPaneTerm2RemoveBtnHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
-			if (rmp.getRmpTerm2select() == null) {
+			if (rmPane.getRmpTerm2select() == null) {
 				alertDialogBuilder(AlertType.ERROR, "Error", "Wrong selection", "Please select a module to remove");
-			} else if (rmp.getRmpTerm2select().isMandatory() == true) {
+			} else if (rmPane.getRmpTerm2select().isMandatory() == true) {
 				alertDialogBuilder(AlertType.ERROR, "Error", "Wrong selection",
 						"Please Select an non mandatory module to remove");
-			} else if (rmp.getRmpTerm2select() != null) {
-				Module m = rmp.getRmpTerm2select();
-				rmp.removeTerm2rmp(m);
-				rmp.addTerm2Unselecrmp(m);
-				rmp.DecremUpdateCredTerm2(m.getModuleCredits());
+			} else if (rmPane.getRmpTerm2select() != null) {
+				Module m = rmPane.getRmpTerm2select();
+				rmPane.removeTerm2rmp(m);
+				rmPane.addTerm2Unselecrmp(m);
+				rmPane.DecremUpdateCredTerm2(m.getModuleCredits());
 			}
 		}
 	}
 
 	String reservemodules = "";
 
-	private class RMPConfirmTerm1ModulesHandler implements EventHandler<ActionEvent> {
+	private class rmPaneConfirmTerm1ModulesHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
-			if (rmp.getCTerm1() < 30) {
+			if (rmPane.getCTerm1() < 30) {
 				alertDialogBuilder(AlertType.ERROR, "Error", "Not Enough Credits Selected",
 						"Please select modules for both terms of 30 credits each");
-			} else if (rmp.getCTerm1() == 30) {
-				rmp.expandnext();
-				for (Module m : rmp.getTerm1selected()) {
+			} else if (rmPane.getCTerm1() == 30) {
+				rmPane.expandnext();
+				for (Module m : rmPane.getTerm1selected()) {
 					reservemodules += String.format("%s%n",
 							"Module code: " + m.getModuleCode() + " Module name: " + m.getModuleName() + " Credits: "
 									+ m.getModuleCredits() + " Delivery: "
 									+ m.getDelivery().toString().replaceAll(m.getDelivery().toString(), "Term 1")
 									+ "\n");
-					osp.setReserveModule(reservemodules);
+									osPane.setReserveModule(reservemodules);
 				}
 			}
 		}
 	}
 
-	private class RMPConfirmTerm2ModulesHandler implements EventHandler<ActionEvent> {
+	private class rmPaneConfirmTerm2ModulesHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
-			if (rmp.getCTerm2() < 30) {
+			if (rmPane.getCTerm2() < 30) {
 				alertDialogBuilder(AlertType.ERROR, "Error", "Not Enough Credits Selected",
 						"Please select modules for both terms of 30 credits each");
-			} else if (rmp.getCTerm2() == 30) {
-				for (Module m : rmp.getTerm2selected()) {
+			} else if (rmPane.getCTerm2() == 30) {
+				for (Module m : rmPane.getTerm2selected()) {
 					reservemodules += String.format("%s%n",
 							"Module code: " + m.getModuleCode() + ", " + " Module name: " + m.getModuleName() + ", "
 									+ " Credits: " + m.getModuleCredits() + ", " + " Delivery: "
 									+ m.getDelivery().toString().replaceAll(m.getDelivery().toString(), "Term 2")
 									+ "\n");
-					osp.setReserveModule(reservemodules);
+									osPane.setReserveModule(reservemodules);
 				}
 				view.changeTab(3);
 			}
@@ -319,71 +319,71 @@ public class ModuleChooserController {
 	// Create profile pane
 	private class CreateStudentProfileHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
-			if (cspp.getStudentPnumber().isEmpty() || cspp.getStudentName().getFirstName().isEmpty()
-					|| cspp.getStudentName().getFamilyName().isEmpty() || cspp.getStudentEmail().isEmpty()
-					|| cspp.getStudentDate() == null) {
+			if (cspPane.getStudentPnumber().isEmpty() || cspPane.getStudentName().getFirstName().isEmpty()
+					|| cspPane.getStudentName().getFamilyName().isEmpty() || cspPane.getStudentEmail().isEmpty()
+					|| cspPane.getStudentDate() == null) {
 
-				if (!cspp.getStudentPnumber().matches("[p P]" + "[1-9]+")) {
-					cspp.changeToRed1();
+				if (!cspPane.getStudentPnumber().matches("[p P]" + "[1-9]+")) {
+					cspPane.changeToRed1();
 				} else {
-					cspp.clearcss1();
+					cspPane.clearcss1();
 				}
 
-				if (!cspp.getStudentName().getFirstName().matches("[a-z A-Z]+")) {
-					cspp.changeToRed2();
+				if (!cspPane.getStudentName().getFirstName().matches("[a-z A-Z]+")) {
+					cspPane.changeToRed2();
 				} else {
-					cspp.clearcss2();
+					cspPane.clearcss2();
 				}
 
-				if (!cspp.getStudentName().getFamilyName().matches("[a-z A-Z]+")) {
-					cspp.changeToRed3();
+				if (!cspPane.getStudentName().getFamilyName().matches("[a-z A-Z]+")) {
+					cspPane.changeToRed3();
 				} else {
-					cspp.clearcss3();
+					cspPane.clearcss3();
 				}
 
-				if (!cspp.getStudentEmail().matches("^[_A-Za-z0-9-+]+(\\.[_A-Za-z0-9-]+)*@"
+				if (!cspPane.getStudentEmail().matches("^[_A-Za-z0-9-+]+(\\.[_A-Za-z0-9-]+)*@"
 						+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")) {
-					cspp.changeToRed4();
+					cspPane.changeToRed4();
 				} else {
-					cspp.clearcss4();
+					cspPane.clearcss4();
 				}
 
-				if (cspp.getStudentDate() == null) {
-					cspp.changeToRed5();
+				if (cspPane.getStudentDate() == null) {
+					cspPane.changeToRed5();
 				} else {
-					cspp.clearcss5();
+					cspPane.clearcss5();
 				}
 			} else {
-				cspp.clearcss1();
-				cspp.clearcss2();
-				cspp.clearcss3();
-				cspp.clearcss4();
-				cspp.clearcss5();
-				profilestring += String.format("%s%n", "PNumber: " + cspp.getStudentPnumber());
+				cspPane.clearcss1();
+				cspPane.clearcss2();
+				cspPane.clearcss3();
+				cspPane.clearcss4();
+				cspPane.clearcss5();
+				profilestring += String.format("%s%n", "PNumber: " + cspPane.getStudentPnumber());
 				profilestring += String.format("%s%n", "Name: " +
-						cspp.getStudentName().getFirstName() + " " + cspp.getStudentName().getFamilyName());
-				profilestring += String.format("%s%n", "Email: " + cspp.getStudentEmail());
-				profilestring += String.format("%s%n", "Date: " + cspp.getStudentDate());
-				profilestring += String.format("%s%n", "Course: " + cspp.getSelectedCourse() + "\n");
+						cspPane.getStudentName().getFirstName() + " " + cspPane.getStudentName().getFamilyName());
+				profilestring += String.format("%s%n", "Email: " + cspPane.getStudentEmail());
+				profilestring += String.format("%s%n", "Date: " + cspPane.getStudentDate());
+				profilestring += String.format("%s%n", "Course: " + cspPane.getSelectedCourse() + "\n");
 
-				osp.setProfile(profilestring);
-				smp.clearSelectedAll();
-				rmp.reserveClearUnSelec();
-				for (Module m : cspp.getSelectedCourse().getAllModulesOnCourse()) {
+				osPane.setProfile(profilestring);
+				smPane.clearSelectedAll();
+				rmPane.reserveClearUnSelec();
+				for (Module m : cspPane.getSelectedCourse().getAllModulesOnCourse()) {
 					if (m.isMandatory() == true && m.getDelivery() == Schedule.TERM_1) {
-						smp.populateSelectTerm1(m);
-						smp.UpdateCredTerm1(m.getModuleCredits());
+						smPane.populateSelectTerm1(m);
+						smPane.UpdateCredTerm1(m.getModuleCredits());
 					} else if (m.isMandatory() == true && m.getDelivery() == Schedule.TERM_2) {
-						smp.populateSelectTerm2(m);
-						smp.UpdateCredTerm2(m.getModuleCredits());
+						smPane.populateSelectTerm2(m);
+						smPane.UpdateCredTerm2(m.getModuleCredits());
 					} else if (m.getDelivery() == Schedule.TERM_1) {
-						smp.populateUnSelectTerm1(m);
+						smPane.populateUnSelectTerm1(m);
 					} else if (m.getDelivery() == Schedule.TERM_2) {
-						smp.populateUnSelectTerm2(m);
+						smPane.populateUnSelectTerm2(m);
 					} else if (m.getDelivery() == Schedule.YEAR_LONG) {
-						smp.populateSelectYearlong(m);
-						smp.UpdateCredTerm1(m.getModuleCredits() / 2);
-						smp.UpdateCredTerm2(m.getModuleCredits() / 2);
+						smPane.populateSelectYearlong(m);
+						smPane.UpdateCredTerm1(m.getModuleCredits() / 2);
+						smPane.UpdateCredTerm2(m.getModuleCredits() / 2);
 						view.changeTab(1);
 					}
 				}
@@ -409,9 +409,9 @@ public class ModuleChooserController {
 				PrintWriter printWriter = new PrintWriter(file);
 
 				if (file != null) {
-					printWriter.write(osp.getStudentProfile()
-							+ osp.getSelectedModules()
-							+ osp.getReservedModules());
+					printWriter.write(osPane.getStudentProfile()
+							+ osPane.getSelectedModules()
+							+ osPane.getReservedModules());
 					printWriter.close();
 				}
 			} catch (FileNotFoundException eror) {
@@ -423,49 +423,66 @@ public class ModuleChooserController {
 	private class AboutButtonHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
 			alertDialogBuilder(AlertType.INFORMATION, "Information Dialog", null,
-				"Enter your details then press create to be able to select modules for third year . \n Once you complete you can save the progress you done or the final text file.");
+					"Enter your details then press create to be able to select modules for third year . \n Once you complete you can save the progress you done or the final text file.");
 		}
 	}
 
-    private class SaveMenuHandler implements EventHandler<ActionEvent> {
-        public void handle(ActionEvent e) {          
-            //save the data model
-            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("modulesObj.dat"));) {
+	private class SaveMenuHandler implements EventHandler<ActionEvent> {
+		public void handle(ActionEvent e) {
 
-                oos.writeObject(model); //writes the model object to a file
-                oos.flush();
-                
-                alertDialogBuilder(AlertType.CONFIRMATION,"Information Dialog", "Save success", "Journey Return saved to modulesObj.dat");
-            }
-            catch (IOException ioExcep){
-                System.out.println("Error saving");
+			try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("modulesObj.dat"));) {
+
+				oos.writeObject(cspPane.getSelectedCourse().getCourseName());
+				oos.writeUTF(cspPane.getStudentPnumber());
+				oos.writeUTF(cspPane.getStudentName().getFirstName());
+				oos.writeUTF(cspPane.getStudentName().getFamilyName());
+				oos.writeUTF(cspPane.getStudentEmail());
+				oos.writeUTF(cspPane.getStudentDate().toString());
+
+				oos.writeObject(smPane.getTerm1selectedmodules().toString());
+				oos.writeObject(smPane.getTerm2selectedmodules().toString());
+				oos.writeObject(smPane.getYearLongselectedmodules().toString());
+				oos.writeObject(rmPane.getRmpTerm1select().toString());
+				oos.writeObject(rmPane.getRmpTerm2select().toString());
+
+				oos.flush();
+
+				alertDialogBuilder(AlertType.CONFIRMATION, "Information Dialog", "Save success",
+						"Journey Return saved to modulesObj.dat");
+			} catch (IOException ioExcep) {
+				System.out.println("Error saving");
 				System.out.println(ioExcep);
 
-            }
-        }
-    }
+			}
+		}
+	}
 
-    private class LoadMenuHandler implements EventHandler<ActionEvent> {
-        public void handle(ActionEvent e) {
-            //load in the data model
-            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("modulesObj.dat"));) {
-                
-                model = (StudentProfile) ois.readObject(); //reads the model object back from a file    
-                
-                alertDialogBuilder(AlertType.CONFIRMATION,"Information Dialog", "Load success", "Journey Return loaded from modulesObj.dat");
-            }
-            catch (IOException ioExcep){
-                System.out.println("Error loading");
-            }
-            catch (ClassNotFoundException c) {
-                System.out.println("Class Not found");
-            }    
+	private class LoadMenuHandler implements EventHandler<ActionEvent> {
+		public void handle(ActionEvent e) {
+			// load in the data model
+			try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("modulesObj.dat"));) {
 
-            //refresh the view
-            // outwardJourney.setJourneyDetails(model.getOutJourney());
-            // returnJourney.setJourneyDetails(model.getReturnJourney());
-        }
-    }
+				model = (StudentProfile) ois.readObject(); // reads the model object back from a file
+
+				alertDialogBuilder(AlertType.CONFIRMATION, "Information Dialog", "Load success",
+						"Journey Return loaded from modulesObj.dat");
+			} catch (IOException ioExcep) {
+				System.out.println("Error loading");
+				System.out.println(ioExcep);
+
+			} catch (ClassNotFoundException c) {
+				System.out.println("Class Not found");
+				System.out.println(c);
+
+			}
+
+			smPane.clearSelectedAll();
+			rmPane.reserveClearUnSelec();
+			osPane.clearAll();
+			cspPane.clearALLCSPp();
+
+		}
+	}
 
 	// helper method - generates course and module data and returns courses within
 	// an array
