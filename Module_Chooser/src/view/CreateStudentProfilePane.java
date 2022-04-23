@@ -1,5 +1,6 @@
 package view;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 import javafx.event.ActionEvent;
@@ -17,7 +18,7 @@ import javafx.scene.layout.HBox;
 import model.Course;
 import model.Name;
 
-public class CreateStudentProfilePane extends GridPane {
+public class CreateStudentProfilePane extends GridPane implements Serializable {
 
 	private ComboBox<Course> cboCourses;
 	private DatePicker inputDate;
@@ -97,16 +98,34 @@ public class CreateStudentProfilePane extends GridPane {
 		return txtPnumber.getText();
 	}
 
+	public void setStudentPnumber(String d) {
+		txtPnumber.setText(d);
+	}
+
 	public Name getStudentName() {
 		return new Name(txtFirstName.getText(), txtSurname.getText());
+	}
+
+	public void setStudentName(Name d) {
+		txtFirstName.setText(d.getFirstName());
+		txtSurname.setText(d.getFamilyName());
 	}
 
 	public String getStudentEmail() {
 		return txtEmail.getText();
 	}
 
+	public void setStudentEmail(String d) {
+		txtEmail.setText(d);
+	}
+
 	public LocalDate getStudentDate() {
 		return inputDate.getValue();
+	}
+
+	
+	public void setStudentDate(LocalDate date) {
+		inputDate.setValue(date);
 	}
 
 	public void changeToRed1() {

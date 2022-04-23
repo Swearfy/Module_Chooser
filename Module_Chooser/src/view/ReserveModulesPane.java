@@ -1,5 +1,7 @@
 package view;
 
+import java.io.Serializable;
+
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -14,7 +16,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import model.Module;
 
-public class ReserveModulesPane extends VBox {
+public class ReserveModulesPane extends VBox implements Serializable {
 
     ListView<Module> txtfld_UnselecTerm1, txtfld_UnselecTerm2, txtfld_ReservTerm1, txtfld_ReservTerm2;
 
@@ -181,16 +183,32 @@ public class ReserveModulesPane extends VBox {
         return txtfld_UnselecTerm1.getSelectionModel().getSelectedItem();
     }
 
+    public ObservableList<Module> getRmpTerm1UnselectLeftOver() {
+        return txtfld_UnselecTerm1.getItems();
+    }
+
     public Module getRmpTerm2Unselect() {
         return txtfld_UnselecTerm2.getSelectionModel().getSelectedItem();
+    }
+
+    public ObservableList<Module> getRmpTerm2UnselectLeftOver() {
+        return txtfld_UnselecTerm2.getItems();
     }
 
     public Module getRmpTerm1select() {
         return txtfld_ReservTerm1.getSelectionModel().getSelectedItem();
     }
 
+    public ObservableList<Module> getRmpTerm1selectLeftOver() {
+        return txtfld_ReservTerm1.getItems();
+    }
+
     public Module getRmpTerm2select() {
         return txtfld_ReservTerm2.getSelectionModel().getSelectedItem();
+    }
+
+    public ObservableList<Module> getRmpTerm2selectLeftOver() {
+        return txtfld_ReservTerm2.getItems();
     }
 
     // Add Selection

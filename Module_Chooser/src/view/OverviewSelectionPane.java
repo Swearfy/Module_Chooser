@@ -1,5 +1,7 @@
 package view;
 
+import java.io.Serializable;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -9,7 +11,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class OverviewSelectionPane extends VBox {
+public class OverviewSelectionPane extends VBox implements Serializable {
 
     Button btn_save;
 

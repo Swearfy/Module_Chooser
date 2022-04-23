@@ -1,11 +1,13 @@
 package view;
 
+import java.io.Serializable;
+
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.layout.BorderPane;
 
-public class ModuleChooserRootPane extends BorderPane {
+public class ModuleChooserRootPane extends BorderPane  implements Serializable{
 
 	private CreateStudentProfilePane cspp;
 	private SelectModulesPane smp;

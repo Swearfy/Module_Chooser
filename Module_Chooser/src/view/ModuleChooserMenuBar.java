@@ -1,5 +1,7 @@
 package view;
 
+import java.io.Serializable;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
@@ -8,7 +10,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.input.KeyCombination;
 
-public class ModuleChooserMenuBar extends MenuBar {
+public class ModuleChooserMenuBar extends MenuBar implements Serializable {
 
 	private MenuItem saveItem, loadItem, aboutItem, exitItem;
 

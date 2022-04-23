@@ -1,9 +1,10 @@
 package model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 
-public class Module implements Comparable<Module> {
+public class Module implements Comparable<Module>, Serializable {
 	
 	private String moduleCode;
 	private String moduleName;

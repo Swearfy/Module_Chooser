@@ -1,5 +1,7 @@
 package view;
 
+import java.io.Serializable;
+
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -13,7 +15,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import model.Module;
 
-public class SelectModulesPane extends VBox {
+public class SelectModulesPane extends VBox  implements Serializable{
 
     Button btn_AddTerm1, btn_AddTerm2, btn_RemoveTerm1, btn_RemoveTerm2, btn_Reset, btn_Submit;
 
