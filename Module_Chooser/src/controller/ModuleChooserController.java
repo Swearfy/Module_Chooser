@@ -1,7 +1,10 @@
 package controller;
 
 import java.io.*;
+import java.time.LocalDate;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
@@ -11,6 +14,7 @@ import model.Course;
 import model.Schedule;
 import model.Module;
 import model.StudentProfile;
+import model.Name;
 import view.ModuleChooserRootPane;
 import view.OverviewSelectionPane;
 import view.ReserveModulesPane;
@@ -419,69 +423,135 @@ public class ModuleChooserController {
 			}
 		}
 	}
-
+	
 	private class AboutButtonHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
 			alertDialogBuilder(AlertType.INFORMATION, "Information Dialog", null,
-					"Enter your details then press create to be able to select modules for third year . \n Once you complete you can save the progress you done or the final text file.");
+			"Enter your details then press create to be able to select modules for third year . \n Once you complete you can save the progress you done or the final text file.");
 		}
 	}
-
+	
+	ObservableList<Module> sMPModules = FXCollections.observableArrayList(); 
+	ObservableList<Module> rMPModules = FXCollections.observableArrayList();
 	private class SaveMenuHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
+			
+			try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("file.dat"));) {
+				
+				model = new StudentProfile();
 
-			try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("modulesObj.dat"));) {
+				model.setStudentPnumber(cspPane.getStudentPnumber());
+				model.setStudentName(cspPane.getStudentName());
+				model.setStudentEmail(cspPane.getStudentEmail());
+				model.setSubmissionDate(cspPane.getStudentDate());
+				
+				for(Module m : smPane.getTerm1UnselectedLeftOver()){
 
-				oos.writeObject(cspPane.getSelectedCourse().getCourseName());
-				oos.writeUTF(cspPane.getStudentPnumber());
-				oos.writeUTF(cspPane.getStudentName().getFirstName());
-				oos.writeUTF(cspPane.getStudentName().getFamilyName());
-				oos.writeUTF(cspPane.getStudentEmail());
-				oos.writeUTF(cspPane.getStudentDate().toString());
+					model.addSelectedModule(m);
+				}
+				for(Module m : smPane.getTerm2UnselectedLeftOver()){
 
-				oos.writeObject(smPane.getTerm1selectedmodules().toString());
-				oos.writeObject(smPane.getTerm2selectedmodules().toString());
-				oos.writeObject(smPane.getYearLongselectedmodules().toString());
-				oos.writeObject(rmPane.getRmpTerm1select().toString());
-				oos.writeObject(rmPane.getRmpTerm2select().toString());
+					model.addSelectedModule(m);
+				}
+				for(Module m : smPane.getYearLongselectedmodules()){
 
+					model.addSelectedModule(m);
+				}
+				for(Module m : smPane.getTerm1selectedmodules()){
+
+					model.addSelectedModule(m);
+				}
+				for(Module m : smPane.getTerm2selectedmodules()){
+
+					model.addSelectedModule(m);
+				}
+
+				for(Module m : rmPane.getRmpTerm1UnselectLeftOver()){
+
+					model.addSelectedModule(m);
+				}
+				for(Module m : rmPane.getRmpTerm2UnselectLeftOver()){
+
+					model.addSelectedModule(m);
+				}
+				for(Module m : rmPane.getRmpTerm1selectLeftOver()){
+
+					model.addSelectedModule(m);
+				}
+				for(Module m : rmPane.getRmpTerm2selectLeftOver()){
+
+					model.addSelectedModule(m);
+				}
+
+				oos.writeObject(model);
 				oos.flush();
 
-				alertDialogBuilder(AlertType.CONFIRMATION, "Information Dialog", "Save success",
-						"Journey Return saved to modulesObj.dat");
-			} catch (IOException ioExcep) {
+				alertDialogBuilder(AlertType.INFORMATION, "Information Dialog", "Save success", 	"Register saved to file.dat");
+			}
+			catch (IOException ioExcep){
 				System.out.println("Error saving");
-				System.out.println(ioExcep);
-
+				ioExcep.printStackTrace();
 			}
 		}
 	}
 
 	private class LoadMenuHandler implements EventHandler<ActionEvent> {
+
 		public void handle(ActionEvent e) {
-			// load in the data model
-			try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("modulesObj.dat"));) {
 
-				model = (StudentProfile) ois.readObject(); // reads the model object back from a file
+			try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("file.dat"));) {
 
-				alertDialogBuilder(AlertType.CONFIRMATION, "Information Dialog", "Load success",
-						"Journey Return loaded from modulesObj.dat");
+				String mPname = (String) ois.readObject();
+				model.setStudentPnumber(mPname);
+				cspPane.setStudentPnumber(mPname);
+
+				Name d = (Name) ois.readObject();
+				model.setStudentName(d);
+				cspPane.setStudentName(d);
+
+
+				String mEmail = (String) ois.readObject();
+				model.setStudentEmail(mEmail);
+				cspPane.setStudentEmail(mEmail);
+
+				
+				LocalDate mDate = (LocalDate) ois.readObject();
+				model.setSubmissionDate(mDate);
+				cspPane.setStudentDate(mDate);
+
+
+				Module mm =	(Module)ois.readObject();
+				model.addSelectedModule(mm);
+				for (Module xModule : model.getAllSelectedModules()) {
+					smPane.populateUnSelectTerm1(xModule);
+				}
+
+				for (Module xModule : model.getAllSelectedModules()) {
+					smPane.populateUnSelectTerm2(xModule);
+				}
+
+				for (Module xModule : model.getAllSelectedModules()) {
+					smPane.populateSelectYearlong(xModule);
+				}
+
+				for (Module xModule : model.getAllSelectedModules()) {
+					smPane.populateSelectTerm1(xModule);
+
+				}
+
+				for (Module xModule : model.getAllSelectedModules()) {
+					smPane.populateSelectTerm2(xModule);
+
+				}
+
+				alertDialogBuilder(AlertType.INFORMATION, "Information Dialog", "Load success",
+						"Register loaded from registerObj.dat");
 			} catch (IOException ioExcep) {
 				System.out.println("Error loading");
-				System.out.println(ioExcep);
-
 			} catch (ClassNotFoundException c) {
 				System.out.println("Class Not found");
-				System.out.println(c);
-
 			}
-
-			smPane.clearSelectedAll();
-			rmPane.reserveClearUnSelec();
-			osPane.clearAll();
-			cspPane.clearALLCSPp();
-
-		}
+		}	
 	}
 
 	// helper method - generates course and module data and returns courses within
