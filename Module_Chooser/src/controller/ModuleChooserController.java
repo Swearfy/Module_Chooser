@@ -501,48 +501,36 @@ public class ModuleChooserController {
 
 			try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("file.dat"));) {
 
-				String mPname = (String) ois.readObject();
-				model.setStudentPnumber(mPname);
-				cspPane.setStudentPnumber(mPname);
+				model = (StudentProfile) ois.readObject();
 
-				Name d = (Name) ois.readObject();
-				model.setStudentName(d);
-				cspPane.setStudentName(d);
-
-
-				String mEmail = (String) ois.readObject();
-				model.setStudentEmail(mEmail);
-				cspPane.setStudentEmail(mEmail);
-
-				
-				LocalDate mDate = (LocalDate) ois.readObject();
-				model.setSubmissionDate(mDate);
-				cspPane.setStudentDate(mDate);
+				cspPane.setStudentPnumber(model.getStudentPnumber());
+				cspPane.setStudentName(model.getStudentName());
+				cspPane.setStudentEmail(model.getStudentEmail());
+				cspPane.setStudentDate(model.getSubmissionDate());
 
 
-				Module mm =	(Module)ois.readObject();
-				model.addSelectedModule(mm);
-				for (Module xModule : model.getAllSelectedModules()) {
-					smPane.populateUnSelectTerm1(xModule);
-				}
+				// model.addSelectedModule(mm);
+				// for (Module xModule : model.getAllSelectedModules()) {
+				// 	smPane.populateUnSelectTerm1(xModule);
+				// }
 
-				for (Module xModule : model.getAllSelectedModules()) {
-					smPane.populateUnSelectTerm2(xModule);
-				}
+				// for (Module xModule : model.getAllSelectedModules()) {
+				// 	smPane.populateUnSelectTerm2(xModule);
+				// }
 
-				for (Module xModule : model.getAllSelectedModules()) {
-					smPane.populateSelectYearlong(xModule);
-				}
+				// for (Module xModule : model.getAllSelectedModules()) {
+				// 	smPane.populateSelectYearlong(xModule);
+				// }
 
-				for (Module xModule : model.getAllSelectedModules()) {
-					smPane.populateSelectTerm1(xModule);
+				// for (Module xModule : model.getAllSelectedModules()) {
+				// 	smPane.populateSelectTerm1(xModule);
 
-				}
+				// }
 
-				for (Module xModule : model.getAllSelectedModules()) {
-					smPane.populateSelectTerm2(xModule);
+				// for (Module xModule : model.getAllSelectedModules()) {
+				// 	smPane.populateSelectTerm2(xModule);
 
-				}
+				// }
 
 				alertDialogBuilder(AlertType.INFORMATION, "Information Dialog", "Load success",
 						"Register loaded from registerObj.dat");
