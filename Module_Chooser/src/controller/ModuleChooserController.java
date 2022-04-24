@@ -449,18 +449,6 @@ public class ModuleChooserController {
 				model.setStudentEmail(cspPane.getStudentEmail());
 				model.setSubmissionDate(cspPane.getStudentDate());
 
-				for (Module m : smPane.getTerm1UnselectedLeftOver()) {
-
-					model.addSelectedModule(m);
-				}
-				for (Module m : smPane.getTerm2UnselectedLeftOver()) {
-
-					model.addSelectedModule(m);
-				}
-				for (Module m : smPane.getYearLongselectedmodules()) {
-
-					model.addSelectedModule(m);
-				}
 				for (Module m : smPane.getTerm1selectedmodules()) {
 
 					model.addSelectedModule(m);
@@ -470,14 +458,6 @@ public class ModuleChooserController {
 					model.addSelectedModule(m);
 				}
 
-				for (Module m : rmPane.getRmpTerm1UnselectLeftOver()) {
-
-					model.addReservedModule(m);
-				}
-				for (Module m : rmPane.getRmpTerm2UnselectLeftOver()) {
-
-					model.addReservedModule(m);
-				}
 				for (Module m : rmPane.getRmpTerm1selectLeftOver()) {
 
 					model.addReservedModule(m);
@@ -511,36 +491,195 @@ public class ModuleChooserController {
 				cspPane.setStudentName(model.getStudentName());
 				cspPane.setStudentEmail(model.getStudentEmail());
 				cspPane.setStudentDate(model.getSubmissionDate());
-				profilestring += String.format("%s%n", "PNumber: " + cspPane.getStudentPnumber());
-				profilestring += String.format("%s%n", "Name: " +
-						cspPane.getStudentName().getFirstName() + " " + cspPane.getStudentName().getFamilyName());
-				profilestring += String.format("%s%n", "Email: " + cspPane.getStudentEmail());
-				profilestring += String.format("%s%n", "Date: " + cspPane.getStudentDate());
-				profilestring += String.format("%s%n", "Course: " + cspPane.getSelectedCourse() + "\n");
+				if (cspPane.getStudentPnumber().isEmpty() || cspPane.getStudentName().getFirstName().isEmpty()
+						|| cspPane.getStudentName().getFamilyName().isEmpty() || cspPane.getStudentEmail().isEmpty()
+						|| cspPane.getStudentDate() == null) {
 
-				osPane.setProfile(profilestring);
+					if (cspPane.getStudentPnumber().matches("[p P]" + "[1-9]+")) {
+						cspPane.changeToRed1(false);
+					} else {
+						cspPane.changeToRed1(true);
+					}
 
-				for (Module m : model.getAllSelectedModules()) {
-					if (m.isMandatory() == true && m.getDelivery() == Schedule.TERM_1) {
-						smPane.populateSelectTerm1(m);
-						smPane.UpdateCredTerm1(m.getModuleCredits());
-					} else if (m.isMandatory() == true && m.getDelivery() == Schedule.TERM_2) {
-						smPane.populateSelectTerm2(m);
-						smPane.UpdateCredTerm2(m.getModuleCredits());
-					} else if (m.getDelivery() == Schedule.TERM_1) {
-						smPane.populateUnSelectTerm1(m);
-					} else if (m.getDelivery() == Schedule.TERM_2) {
-						smPane.populateUnSelectTerm2(m);
-					} else if (m.getDelivery() == Schedule.YEAR_LONG) {
-						smPane.populateSelectYearlong(m);
-						smPane.UpdateCredTerm1(m.getModuleCredits() / 2);
-						smPane.UpdateCredTerm2(m.getModuleCredits() / 2);
+					if (cspPane.getStudentName().getFirstName().matches("[a-z A-Z]+")) {
+						cspPane.changeToRed2(false);
+					} else {
+						cspPane.changeToRed2(true);
+					}
+
+					if (cspPane.getStudentName().getFamilyName().matches("[a-z A-Z]+")) {
+						cspPane.changeToRed3(false);
+					} else {
+						cspPane.changeToRed3(true);
+					}
+
+					if (cspPane.getStudentEmail().matches("^[_A-Za-z0-9-+]+(\\.[_A-Za-z0-9-]+)*@"
+							+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")) {
+						cspPane.changeToRed4(false);
+					} else {
+						cspPane.changeToRed4(true);
+					}
+
+					if (cspPane.getStudentDate() == null) {
+						cspPane.changeToRed5(true);
+					} else {
+						cspPane.changeToRed5(false);
+					}
+				} else {
+					cspPane.changeToRed1(false);
+					cspPane.changeToRed2(false);
+					cspPane.changeToRed3(false);
+					cspPane.changeToRed4(false);
+					cspPane.changeToRed5(false);
+					profilestring += String.format("%s%n", "PNumber: " + cspPane.getStudentPnumber());
+					profilestring += String.format("%s%n", "Name: " +
+							cspPane.getStudentName().getFirstName() + " " + cspPane.getStudentName().getFamilyName());
+					profilestring += String.format("%s%n", "Email: " + cspPane.getStudentEmail());
+					profilestring += String.format("%s%n", "Date: " + cspPane.getStudentDate());
+					profilestring += String.format("%s%n", "Course: " + cspPane.getSelectedCourse() + "\n");
+
+					osPane.setProfile(profilestring);
+					smPane.clearSelectedAll();
+					rmPane.reserveClearUnSelec();
+
+					cspPane.getSelectedCourse().getAllModulesOnCourse().removeAll(model.getAllSelectedModules());
+
+					//populate smp unselected
+					for (Module m : cspPane.getSelectedCourse().getAllModulesOnCourse()) {
+
+						if (m.getDelivery() == Schedule.TERM_1) {
+							smPane.populateUnSelectTerm1(m);
+						} else if (m.getDelivery() == Schedule.TERM_2) {
+							smPane.populateUnSelectTerm2(m);
+						} else if (m.getDelivery() == Schedule.YEAR_LONG) {
+							smPane.populateSelectYearlong(m);
+							smPane.UpdateCredTerm1(m.getModuleCredits() / 2);
+							smPane.UpdateCredTerm2(m.getModuleCredits() / 2);
+						}
+					}
+
+					//populate smp selected
+					for (Module m : model.getAllSelectedModules()) {
+						if (m.getDelivery() == Schedule.TERM_1) {
+							smPane.populateSelectTerm1(m);
+							smPane.UpdateCredTerm1(m.getModuleCredits());
+						} else if (m.getDelivery() == Schedule.TERM_2) {
+							smPane.populateSelectTerm2(m);
+							smPane.UpdateCredTerm2(m.getModuleCredits());
+						}
 						view.changeTab(1);
 					}
-				}
 
-				alertDialogBuilder(AlertType.INFORMATION, "Information Dialog", "Load success",
-						"Register loaded from registerObj.dat");
+					//check creds smp
+					if (smPane.GetCredTerm1() < 60 || smPane.GetCredTerm2() < 60) {
+						alertDialogBuilder(AlertType.ERROR, "Error", "Not Enough Credits Selected",
+								"Please select modules for both terms of 60 credits each");
+					} else if (smPane.GetCredTerm1() == 60 && smPane.GetCredTerm2() == 60) {
+						for (Module m : smPane.getYearLongselectedmodules()) {
+							String truefalse = m.isMandatory() ? "yes" : "no";
+							selectedmodules += String.format("%s%n",
+									"Module code: " + m.getModuleCode() + ", " + " Module name: " + m.getModuleName()
+											+ ", "
+											+ " Credits: " + m.getModuleCredits() + ", " + "Mandatory Course: "
+											+ truefalse
+											+ ", " + " Delivery: "
+											+ m.getDelivery().toString().replaceAll(m.getDelivery().toString(),
+													"Term 1")
+											+ "\n");
+							osPane.setSelectModules(selectedmodules);
+						}
+
+						for (Module m : smPane.getTerm1selectedmodules()) {
+							String truefalse = m.isMandatory() ? "yes" : "no";
+							selectedmodules += String.format("%s%n",
+									"Module code: " + m.getModuleCode() + ", " + " Module name: " + m.getModuleName()
+											+ ", "
+											+ " Credits: " + m.getModuleCredits() + ", " + "Mandatory Course: "
+											+ truefalse
+											+ ", " + " Delivery: "
+											+ m.getDelivery().toString().replaceAll(m.getDelivery().toString(),
+													"Term 2")
+											+ "\n");
+							osPane.setSelectModules(selectedmodules);
+						}
+
+						for (Module m : smPane.getTerm2selectedmodules()) {
+							String truefalse = m.isMandatory() ? "yes" : "no";
+							selectedmodules += String.format("%s%n",
+									"Module code: " + m.getModuleCode() + ", " + " Module name: " + m.getModuleName()
+											+ ", "
+											+ " Credits: " + m.getModuleCredits() + ", " + "Mandatory Course: "
+											+ truefalse
+											+ ", " + " Delivery: "
+											+ m.getDelivery().toString().replaceAll(m.getDelivery().toString(),
+													"Year Long")
+											+ "\n");
+							osPane.setSelectModules(selectedmodules);
+						}
+						view.changeTab(2);
+
+						smPane.getTerm1UnselectedLeftOver().removeAll(model.getAllReservedModules());
+						smPane.getTerm2UnselectedLeftOver().removeAll(model.getAllReservedModules());
+
+						for (Module m : smPane.getTerm1UnselectedLeftOver()) {
+							rmPane.rmpPopulateUnSlctTerm1(m);
+						}
+						for (Module m : smPane.getTerm2UnselectedLeftOver()) {
+							rmPane.rmpPopulateUnSlctTerm2(m);
+						}
+
+						for (Module m : model.getAllReservedModules()) {
+							if (m.getDelivery() == Schedule.TERM_1) {
+								rmPane.reservePopulateSelectTerm1(m);
+								rmPane.updateCredT1(m.getModuleCredits());
+								rmPane.expandnext();
+							} else if(m.getDelivery() == Schedule.TERM_2){
+								rmPane.reservePopulateSelectTerm2(m);
+								rmPane.updateCredT2(m.getModuleCredits());
+							}
+						}
+					}
+
+					// check term 1 reserve
+
+					if (rmPane.getCTerm1() < 30) {
+						alertDialogBuilder(AlertType.ERROR, "Error", "Not Enough Credits Selected",
+								"Please select modules for both terms of 30 credits each");
+					} else if (rmPane.getCTerm1() == 30) {
+						rmPane.expandnext();
+						for (Module m : rmPane.getTerm1selected()) {
+							reservemodules += String.format("%s%n",
+									"Module code: " + m.getModuleCode() + " Module name: " + m.getModuleName()
+											+ " Credits: "
+											+ m.getModuleCredits() + " Delivery: "
+											+ m.getDelivery().toString().replaceAll(m.getDelivery().toString(),
+													"Term 1")
+											+ "\n");
+							osPane.setReserveModule(reservemodules);
+						}
+					}
+
+					// check term 2 reserve
+					if (rmPane.getCTerm2() < 30) {
+						alertDialogBuilder(AlertType.ERROR, "Error", "Not Enough Credits Selected",
+								"Please select modules for both terms of 30 credits each");
+					} else if (rmPane.getCTerm2() == 30) {
+						for (Module m : rmPane.getTerm2selected()) {
+							reservemodules += String.format("%s%n",
+									"Module code: " + m.getModuleCode() + ", " + " Module name: " + m.getModuleName()
+											+ ", "
+											+ " Credits: " + m.getModuleCredits() + ", " + " Delivery: "
+											+ m.getDelivery().toString().replaceAll(m.getDelivery().toString(),
+													"Term 2")
+											+ "\n");
+							osPane.setReserveModule(reservemodules);
+						}
+						view.changeTab(3);
+					}
+
+					alertDialogBuilder(AlertType.INFORMATION, "Information Dialog", "Load success",
+							"Register loaded from registerObj.dat");
+				}
 			} catch (IOException ioExcep) {
 				System.out.println("Error loading");
 			} catch (ClassNotFoundException c) {
@@ -565,7 +704,8 @@ public class ModuleChooserController {
 		Module ctec3906 = new Module("CTEC3906", "Interaction Design", 15, false, Schedule.TERM_1);
 		Module ctec3911 = new Module("CTEC3911", "Mobile Application Development", 15, false, Schedule.TERM_1);
 		Module imat3410 = new Module("IMAT3104", "Database Management and Programming", 15, false, Schedule.TERM_2);
-		Module imat3406 = new Module("IMAT3406", "Fuzzy Logic and Knowledge Based Systems", 15, false, Schedule.TERM_1);
+		Module imat3406 = new Module("IMAT3406", "Fuzzy Logic and Knowledge Based Systems", 15, false,
+				Schedule.TERM_1);
 		Module imat3611 = new Module("IMAT3611", "Computer Ethics and Privacy", 15, false, Schedule.TERM_1);
 		Module imat3613 = new Module("IMAT3613", "Data Mining", 15, false, Schedule.TERM_1);
 		Module imat3614 = new Module("IMAT3614", "Big Data and Business Models", 15, false, Schedule.TERM_2);
