@@ -431,8 +431,6 @@ public class ModuleChooserController {
 		}
 	}
 	
-	ObservableList<Module> sMPModules = FXCollections.observableArrayList(); 
-	ObservableList<Module> rMPModules = FXCollections.observableArrayList();
 	private class SaveMenuHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
 			
@@ -468,19 +466,19 @@ public class ModuleChooserController {
 
 				for(Module m : rmPane.getRmpTerm1UnselectLeftOver()){
 
-					model.addSelectedModule(m);
+					model.addReservedModule(m);
 				}
 				for(Module m : rmPane.getRmpTerm2UnselectLeftOver()){
 
-					model.addSelectedModule(m);
+					model.addReservedModule(m);
 				}
 				for(Module m : rmPane.getRmpTerm1selectLeftOver()){
 
-					model.addSelectedModule(m);
+					model.addReservedModule(m);
 				}
 				for(Module m : rmPane.getRmpTerm2selectLeftOver()){
 
-					model.addSelectedModule(m);
+					model.addReservedModule(m);
 				}
 
 				oos.writeObject(model);
