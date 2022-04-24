@@ -111,12 +111,12 @@ public class SelectModulesPane extends VBox  implements Serializable{
         leftbox.getChildren().add(lbl_Unselct1);
         leftbox.getChildren().add(unselectTerm1);
         leftbox.getChildren().add(ButtonBOXTerm1);
-        this.setMargin(ButtonBOXTerm1, new Insets(10, 10, 10, 10));
+        VBox.setMargin(ButtonBOXTerm1, new Insets(10, 10, 10, 10));
 
         leftbox.getChildren().add(lbl_Unselct2);
         leftbox.getChildren().add(unselectTerm2);
         leftbox.getChildren().add(ButtonBOXTerm2);
-        this.setMargin(ButtonBOXTerm2, new Insets(10, 10, 10, 10));
+        VBox.setMargin(ButtonBOXTerm2, new Insets(10, 10, 10, 10));
 
         leftbox.prefWidthProperty().bind(this.widthProperty());
         leftbox.prefHeightProperty().bind(this.heightProperty());
@@ -140,9 +140,9 @@ public class SelectModulesPane extends VBox  implements Serializable{
         Main.setSpacing(20);
         Credterm12Box.setSpacing(40);
 
-        this.setMargin(Main, new Insets(10, 10, 10, 10));
-        this.setMargin(Credterm12Box, new Insets(10, 10, 10, 10));
-        this.setMargin(ButtonResetSubBox, new Insets(10, 10, 10, 10));
+        VBox.setMargin(Main, new Insets(10, 10, 10, 10));
+        VBox.setMargin(Credterm12Box, new Insets(10, 10, 10, 10));
+        VBox.setMargin(ButtonResetSubBox, new Insets(10, 10, 10, 10));
 
         this.getChildren().add(Main);
         this.getChildren().add(Credterm12Box);

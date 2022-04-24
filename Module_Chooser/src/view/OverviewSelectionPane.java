@@ -56,9 +56,9 @@ public class OverviewSelectionPane extends VBox implements Serializable {
         profile.prefWidthProperty().bind(hbox.widthProperty());
 
         this.setAlignment(Pos.CENTER);
-        this.setMargin(hbox, new Insets(10, 10, 10, 10));
-        this.setMargin(profile, new Insets(10, 10, 10, 10));
-        this.setMargin(btn_save, new Insets(10, 10, 10, 10));
+        VBox.setMargin(hbox, new Insets(10, 10, 10, 10));
+        VBox.setMargin(profile, new Insets(10, 10, 10, 10));
+        VBox.setMargin(btn_save, new Insets(10, 10, 10, 10));
 
     }
 
