@@ -123,54 +123,48 @@ public class CreateStudentProfilePane extends GridPane implements Serializable {
 		return inputDate.getValue();
 	}
 
-	
 	public void setStudentDate(LocalDate date) {
 		inputDate.setValue(date);
 	}
 
-	public void changeToRed1() {
-		txtPnumber.setStyle("-fx-border-color: red ");
+	public void changeToRed1(Boolean d) {
+		if (d.equals(true)) {
+			txtPnumber.setStyle("-fx-border-color: red ");
+		} else {
+			txtPnumber.setStyle("");
+		}
 	}
 
-	public void changeToRed2() {
-		txtFirstName.setStyle("-fx-border-color: red ");
+	public void changeToRed2(Boolean d) {
+		if (d.equals(true)) {
+			txtFirstName.setStyle("-fx-border-color: red ");
+		} else {
+			txtFirstName.setStyle("");
+		}
 	}
 
-	public void changeToRed3() {
-		txtSurname.setStyle("-fx-border-color: red ");
+	public void changeToRed3(Boolean d) {
+		if (d.equals(true)) {
+			txtSurname.setStyle("-fx-border-color: red ");
+		} else {
+			txtSurname.setStyle("");
+		}
 	}
 
-	public void changeToRed4() {
-		txtEmail.setStyle("-fx-border-color: red ");
+	public void changeToRed4(Boolean d) {
+		if (d.equals(true)) {
+			txtEmail.setStyle("-fx-border-color: red ");
+		} else {
+			txtEmail.setStyle("");
+		}
 	}
 
-	public void changeToRed5() {
-		inputDate.setStyle("-fx-border-color: red ");
-	}
-
-	public void clearcss1() {
-		txtPnumber.setStyle("");
-
-	}
-
-	public void clearcss2() {
-		txtFirstName.setStyle("");
-
-	}
-
-	public void clearcss3() {
-		txtSurname.setStyle("");
-
-	}
-
-	public void clearcss4() {
-		txtEmail.setStyle("");
-
-	}
-
-	public void clearcss5() {
-		inputDate.setStyle("");
-
+	public void changeToRed5(Boolean d) {
+		if (d.equals(true)) {
+			inputDate.setStyle("-fx-border-color: red ");
+		} else {
+			inputDate.setStyle("");
+		}
 	}
 
 	public void clearALLCSPp() {

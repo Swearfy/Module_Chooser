@@ -98,42 +98,42 @@ public class ModuleChooserController {
 					|| cspPane.getStudentName().getFamilyName().isEmpty() || cspPane.getStudentEmail().isEmpty()
 					|| cspPane.getStudentDate() == null) {
 
-				if (!cspPane.getStudentPnumber().matches("[p P]" + "[1-9]+")) {
-					cspPane.changeToRed1();
+				if (cspPane.getStudentPnumber().matches("[p P]" + "[1-9]+")) {
+					cspPane.changeToRed1(false);
 				} else {
-					cspPane.clearcss1();
+					cspPane.changeToRed1(true);
 				}
 
-				if (!cspPane.getStudentName().getFirstName().matches("[a-z A-Z]+")) {
-					cspPane.changeToRed2();
+				if (cspPane.getStudentName().getFirstName().matches("[a-z A-Z]+")) {
+					cspPane.changeToRed2(false);
 				} else {
-					cspPane.clearcss2();
+					cspPane.changeToRed2(true);
 				}
 
-				if (!cspPane.getStudentName().getFamilyName().matches("[a-z A-Z]+")) {
-					cspPane.changeToRed3();
+				if (cspPane.getStudentName().getFamilyName().matches("[a-z A-Z]+")) {
+					cspPane.changeToRed3(false);
 				} else {
-					cspPane.clearcss3();
+					cspPane.changeToRed3(true);
 				}
 
-				if (!cspPane.getStudentEmail().matches("^[_A-Za-z0-9-+]+(\\.[_A-Za-z0-9-]+)*@"
+				if (cspPane.getStudentEmail().matches("^[_A-Za-z0-9-+]+(\\.[_A-Za-z0-9-]+)*@"
 						+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")) {
-					cspPane.changeToRed4();
+					cspPane.changeToRed4(false);
 				} else {
-					cspPane.clearcss4();
+					cspPane.changeToRed4(true);
 				}
 
 				if (cspPane.getStudentDate() == null) {
-					cspPane.changeToRed5();
+					cspPane.changeToRed5(true);
 				} else {
-					cspPane.clearcss5();
+					cspPane.changeToRed5(false);
 				}
 			} else {
-				cspPane.clearcss1();
-				cspPane.clearcss2();
-				cspPane.clearcss3();
-				cspPane.clearcss4();
-				cspPane.clearcss5();
+				cspPane.changeToRed1(false);
+				cspPane.changeToRed2(false);
+				cspPane.changeToRed3(false);
+				cspPane.changeToRed4(false);
+				cspPane.changeToRed5(false);
 				profilestring += String.format("%s%n", "PNumber: " + cspPane.getStudentPnumber());
 				profilestring += String.format("%s%n", "Name: " +
 						cspPane.getStudentName().getFirstName() + " " + cspPane.getStudentName().getFamilyName());
