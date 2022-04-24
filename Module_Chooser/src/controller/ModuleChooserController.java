@@ -1,10 +1,7 @@
 package controller;
 
 import java.io.*;
-import java.time.LocalDate;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
@@ -14,7 +11,6 @@ import model.Course;
 import model.Schedule;
 import model.Module;
 import model.StudentProfile;
-import model.Name;
 import view.ModuleChooserRootPane;
 import view.OverviewSelectionPane;
 import view.ReserveModulesPane;
@@ -57,36 +53,124 @@ public class ModuleChooserController {
 	// helper method - used to attach event handlers
 	private void attachEventHandlers() {
 		// attach an event handler to the create student profile pane
+
+		// Create profile pane
 		cspPane.addCreateStudentProfileHandler(new CreateStudentProfileHandler());
 		cspPane.darkmode(new Darkmodehandler());
 
-		smPane.ResetBTN(new CreateStudentProfileHandler());
-
+		// Selecte pane
 		smPane.addselectterm1(new smPaneTerm1AddButtonHandler());
 		smPane.addselectterm2(new smPaneTerm2AddButtonHandler());
 
 		smPane.removeBtn1(new smPaneTerm1RemoveButtonHandler());
 		smPane.removeBtn2(new smPaneTerm2RemoveButtonHandler());
 
+		smPane.ResetBTN(new CreateStudentProfileHandler());
+
 		smPane.SubmitBtn(new smPaneSubmitModulesHandler());
 
+		// Reserve pane
 		rmPane.addSelectTerm1RMP(new rmPaneTerm1AddBtnHandler());
 		rmPane.addSelectTerm2RMP(new rmPaneTerm2AddBtnHandler());
+		rmPane.confirmTerm1RMP(new rmPaneConfirmTerm1ModulesHandler());
 
 		rmPane.removeBtn1RMP(new rmPaneTerm1RemoveBtnHandler());
 		rmPane.removeBtn2RMP(new rmPaneTerm2RemoveBtnHandler());
-
-		rmPane.confirmTerm1RMP(new rmPaneConfirmTerm1ModulesHandler());
 		rmPane.confirmTerm2RMP(new rmPaneConfirmTerm2ModulesHandler());
 
+		// Overview save
+		osPane.saveBTN(new SaveButtonOWHandler());
+
+		// menu pane
 		mstMenuBar.addSaveHandler(new SaveMenuHandler());
 		mstMenuBar.addLoadHandler(new LoadMenuHandler());
 
-		// attach an event handler to the menu bar that closes the application
+		// Lambada menu pane
 		mstMenuBar.addExitHandler(e -> System.exit(0));
 		mstMenuBar.addAboutHandler(new AboutButtonHandler());
 
-		osPane.saveBTN(new SaveButtonOWHandler());
+	}
+
+	// Create profile pane
+	private class CreateStudentProfileHandler implements EventHandler<ActionEvent> {
+		public void handle(ActionEvent e) {
+			if (cspPane.getStudentPnumber().isEmpty() || cspPane.getStudentName().getFirstName().isEmpty()
+					|| cspPane.getStudentName().getFamilyName().isEmpty() || cspPane.getStudentEmail().isEmpty()
+					|| cspPane.getStudentDate() == null) {
+
+				if (!cspPane.getStudentPnumber().matches("[p P]" + "[1-9]+")) {
+					cspPane.changeToRed1();
+				} else {
+					cspPane.clearcss1();
+				}
+
+				if (!cspPane.getStudentName().getFirstName().matches("[a-z A-Z]+")) {
+					cspPane.changeToRed2();
+				} else {
+					cspPane.clearcss2();
+				}
+
+				if (!cspPane.getStudentName().getFamilyName().matches("[a-z A-Z]+")) {
+					cspPane.changeToRed3();
+				} else {
+					cspPane.clearcss3();
+				}
+
+				if (!cspPane.getStudentEmail().matches("^[_A-Za-z0-9-+]+(\\.[_A-Za-z0-9-]+)*@"
+						+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")) {
+					cspPane.changeToRed4();
+				} else {
+					cspPane.clearcss4();
+				}
+
+				if (cspPane.getStudentDate() == null) {
+					cspPane.changeToRed5();
+				} else {
+					cspPane.clearcss5();
+				}
+			} else {
+				cspPane.clearcss1();
+				cspPane.clearcss2();
+				cspPane.clearcss3();
+				cspPane.clearcss4();
+				cspPane.clearcss5();
+				profilestring += String.format("%s%n", "PNumber: " + cspPane.getStudentPnumber());
+				profilestring += String.format("%s%n", "Name: " +
+						cspPane.getStudentName().getFirstName() + " " + cspPane.getStudentName().getFamilyName());
+				profilestring += String.format("%s%n", "Email: " + cspPane.getStudentEmail());
+				profilestring += String.format("%s%n", "Date: " + cspPane.getStudentDate());
+				profilestring += String.format("%s%n", "Course: " + cspPane.getSelectedCourse() + "\n");
+
+				osPane.setProfile(profilestring);
+				smPane.clearSelectedAll();
+				rmPane.reserveClearUnSelec();
+				for (Module m : cspPane.getSelectedCourse().getAllModulesOnCourse()) {
+					if (m.isMandatory() == true && m.getDelivery() == Schedule.TERM_1) {
+						smPane.populateSelectTerm1(m);
+						smPane.UpdateCredTerm1(m.getModuleCredits());
+					} else if (m.isMandatory() == true && m.getDelivery() == Schedule.TERM_2) {
+						smPane.populateSelectTerm2(m);
+						smPane.UpdateCredTerm2(m.getModuleCredits());
+					} else if (m.getDelivery() == Schedule.TERM_1) {
+						smPane.populateUnSelectTerm1(m);
+					} else if (m.getDelivery() == Schedule.TERM_2) {
+						smPane.populateUnSelectTerm2(m);
+					} else if (m.getDelivery() == Schedule.YEAR_LONG) {
+						smPane.populateSelectYearlong(m);
+						smPane.UpdateCredTerm1(m.getModuleCredits() / 2);
+						smPane.UpdateCredTerm2(m.getModuleCredits() / 2);
+						view.changeTab(1);
+					}
+				}
+			}
+		}
+	}
+
+	// Dark mode button
+	private class Darkmodehandler implements EventHandler<ActionEvent> {
+		public void handle(ActionEvent e) {
+			view.getStylesheets().add(getClass().getResource("dark-theme.css").toString());
+		}
 	}
 
 	// Select module pane classes
@@ -320,87 +404,7 @@ public class ModuleChooserController {
 
 	String profilestring = "";
 
-	// Create profile pane
-	private class CreateStudentProfileHandler implements EventHandler<ActionEvent> {
-		public void handle(ActionEvent e) {
-			if (cspPane.getStudentPnumber().isEmpty() || cspPane.getStudentName().getFirstName().isEmpty()
-					|| cspPane.getStudentName().getFamilyName().isEmpty() || cspPane.getStudentEmail().isEmpty()
-					|| cspPane.getStudentDate() == null) {
-
-				if (!cspPane.getStudentPnumber().matches("[p P]" + "[1-9]+")) {
-					cspPane.changeToRed1();
-				} else {
-					cspPane.clearcss1();
-				}
-
-				if (!cspPane.getStudentName().getFirstName().matches("[a-z A-Z]+")) {
-					cspPane.changeToRed2();
-				} else {
-					cspPane.clearcss2();
-				}
-
-				if (!cspPane.getStudentName().getFamilyName().matches("[a-z A-Z]+")) {
-					cspPane.changeToRed3();
-				} else {
-					cspPane.clearcss3();
-				}
-
-				if (!cspPane.getStudentEmail().matches("^[_A-Za-z0-9-+]+(\\.[_A-Za-z0-9-]+)*@"
-						+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")) {
-					cspPane.changeToRed4();
-				} else {
-					cspPane.clearcss4();
-				}
-
-				if (cspPane.getStudentDate() == null) {
-					cspPane.changeToRed5();
-				} else {
-					cspPane.clearcss5();
-				}
-			} else {
-				cspPane.clearcss1();
-				cspPane.clearcss2();
-				cspPane.clearcss3();
-				cspPane.clearcss4();
-				cspPane.clearcss5();
-				profilestring += String.format("%s%n", "PNumber: " + cspPane.getStudentPnumber());
-				profilestring += String.format("%s%n", "Name: " +
-						cspPane.getStudentName().getFirstName() + " " + cspPane.getStudentName().getFamilyName());
-				profilestring += String.format("%s%n", "Email: " + cspPane.getStudentEmail());
-				profilestring += String.format("%s%n", "Date: " + cspPane.getStudentDate());
-				profilestring += String.format("%s%n", "Course: " + cspPane.getSelectedCourse() + "\n");
-
-				osPane.setProfile(profilestring);
-				smPane.clearSelectedAll();
-				rmPane.reserveClearUnSelec();
-				for (Module m : cspPane.getSelectedCourse().getAllModulesOnCourse()) {
-					if (m.isMandatory() == true && m.getDelivery() == Schedule.TERM_1) {
-						smPane.populateSelectTerm1(m);
-						smPane.UpdateCredTerm1(m.getModuleCredits());
-					} else if (m.isMandatory() == true && m.getDelivery() == Schedule.TERM_2) {
-						smPane.populateSelectTerm2(m);
-						smPane.UpdateCredTerm2(m.getModuleCredits());
-					} else if (m.getDelivery() == Schedule.TERM_1) {
-						smPane.populateUnSelectTerm1(m);
-					} else if (m.getDelivery() == Schedule.TERM_2) {
-						smPane.populateUnSelectTerm2(m);
-					} else if (m.getDelivery() == Schedule.YEAR_LONG) {
-						smPane.populateSelectYearlong(m);
-						smPane.UpdateCredTerm1(m.getModuleCredits() / 2);
-						smPane.UpdateCredTerm2(m.getModuleCredits() / 2);
-						view.changeTab(1);
-					}
-				}
-			}
-		}
-	}
-
-	private class Darkmodehandler implements EventHandler<ActionEvent> {
-		public void handle(ActionEvent e) {
-			view.getStylesheets().add(getClass().getResource("dark-theme.css").toString());
-		}
-	}
-
+	// Overview Pane
 	private class SaveButtonOWHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
 
@@ -423,60 +427,62 @@ public class ModuleChooserController {
 			}
 		}
 	}
-	
+
 	private class AboutButtonHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
 			alertDialogBuilder(AlertType.INFORMATION, "Information Dialog", null,
-			"Enter your details then press create to be able to select modules for third year . \n Once you complete you can save the progress you done or the final text file.");
+					"Enter your details then press create to be able to select modules for third year . \n Once you complete you can save the progress you done or the final text file.");
 		}
 	}
-	
+
+	// Menu Handlers Classes
+
 	private class SaveMenuHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
-			
+
 			try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("file.dat"));) {
-				
+
 				model = new StudentProfile();
 
 				model.setStudentPnumber(cspPane.getStudentPnumber());
 				model.setStudentName(cspPane.getStudentName());
 				model.setStudentEmail(cspPane.getStudentEmail());
 				model.setSubmissionDate(cspPane.getStudentDate());
-				
-				for(Module m : smPane.getTerm1UnselectedLeftOver()){
+
+				for (Module m : smPane.getTerm1UnselectedLeftOver()) {
 
 					model.addSelectedModule(m);
 				}
-				for(Module m : smPane.getTerm2UnselectedLeftOver()){
+				for (Module m : smPane.getTerm2UnselectedLeftOver()) {
 
 					model.addSelectedModule(m);
 				}
-				for(Module m : smPane.getYearLongselectedmodules()){
+				for (Module m : smPane.getYearLongselectedmodules()) {
 
 					model.addSelectedModule(m);
 				}
-				for(Module m : smPane.getTerm1selectedmodules()){
+				for (Module m : smPane.getTerm1selectedmodules()) {
 
 					model.addSelectedModule(m);
 				}
-				for(Module m : smPane.getTerm2selectedmodules()){
+				for (Module m : smPane.getTerm2selectedmodules()) {
 
 					model.addSelectedModule(m);
 				}
 
-				for(Module m : rmPane.getRmpTerm1UnselectLeftOver()){
+				for (Module m : rmPane.getRmpTerm1UnselectLeftOver()) {
 
 					model.addReservedModule(m);
 				}
-				for(Module m : rmPane.getRmpTerm2UnselectLeftOver()){
+				for (Module m : rmPane.getRmpTerm2UnselectLeftOver()) {
 
 					model.addReservedModule(m);
 				}
-				for(Module m : rmPane.getRmpTerm1selectLeftOver()){
+				for (Module m : rmPane.getRmpTerm1selectLeftOver()) {
 
 					model.addReservedModule(m);
 				}
-				for(Module m : rmPane.getRmpTerm2selectLeftOver()){
+				for (Module m : rmPane.getRmpTerm2selectLeftOver()) {
 
 					model.addReservedModule(m);
 				}
@@ -484,9 +490,9 @@ public class ModuleChooserController {
 				oos.writeObject(model);
 				oos.flush();
 
-				alertDialogBuilder(AlertType.INFORMATION, "Information Dialog", "Save success", 	"Register saved to file.dat");
-			}
-			catch (IOException ioExcep){
+				alertDialogBuilder(AlertType.INFORMATION, "Information Dialog", "Save success",
+						"Register saved to file.dat");
+			} catch (IOException ioExcep) {
 				System.out.println("Error saving");
 				ioExcep.printStackTrace();
 			}
@@ -505,30 +511,33 @@ public class ModuleChooserController {
 				cspPane.setStudentName(model.getStudentName());
 				cspPane.setStudentEmail(model.getStudentEmail());
 				cspPane.setStudentDate(model.getSubmissionDate());
+				profilestring += String.format("%s%n", "PNumber: " + cspPane.getStudentPnumber());
+				profilestring += String.format("%s%n", "Name: " +
+						cspPane.getStudentName().getFirstName() + " " + cspPane.getStudentName().getFamilyName());
+				profilestring += String.format("%s%n", "Email: " + cspPane.getStudentEmail());
+				profilestring += String.format("%s%n", "Date: " + cspPane.getStudentDate());
+				profilestring += String.format("%s%n", "Course: " + cspPane.getSelectedCourse() + "\n");
 
+				osPane.setProfile(profilestring);
 
-				// model.addSelectedModule(mm);
-				// for (Module xModule : model.getAllSelectedModules()) {
-				// 	smPane.populateUnSelectTerm1(xModule);
-				// }
-
-				// for (Module xModule : model.getAllSelectedModules()) {
-				// 	smPane.populateUnSelectTerm2(xModule);
-				// }
-
-				// for (Module xModule : model.getAllSelectedModules()) {
-				// 	smPane.populateSelectYearlong(xModule);
-				// }
-
-				// for (Module xModule : model.getAllSelectedModules()) {
-				// 	smPane.populateSelectTerm1(xModule);
-
-				// }
-
-				// for (Module xModule : model.getAllSelectedModules()) {
-				// 	smPane.populateSelectTerm2(xModule);
-
-				// }
+				for (Module m : model.getAllSelectedModules()) {
+					if (m.isMandatory() == true && m.getDelivery() == Schedule.TERM_1) {
+						smPane.populateSelectTerm1(m);
+						smPane.UpdateCredTerm1(m.getModuleCredits());
+					} else if (m.isMandatory() == true && m.getDelivery() == Schedule.TERM_2) {
+						smPane.populateSelectTerm2(m);
+						smPane.UpdateCredTerm2(m.getModuleCredits());
+					} else if (m.getDelivery() == Schedule.TERM_1) {
+						smPane.populateUnSelectTerm1(m);
+					} else if (m.getDelivery() == Schedule.TERM_2) {
+						smPane.populateUnSelectTerm2(m);
+					} else if (m.getDelivery() == Schedule.YEAR_LONG) {
+						smPane.populateSelectYearlong(m);
+						smPane.UpdateCredTerm1(m.getModuleCredits() / 2);
+						smPane.UpdateCredTerm2(m.getModuleCredits() / 2);
+						view.changeTab(1);
+					}
+				}
 
 				alertDialogBuilder(AlertType.INFORMATION, "Information Dialog", "Load success",
 						"Register loaded from registerObj.dat");
@@ -537,7 +546,7 @@ public class ModuleChooserController {
 			} catch (ClassNotFoundException c) {
 				System.out.println("Class Not found");
 			}
-		}	
+		}
 	}
 
 	// helper method - generates course and module data and returns courses within
