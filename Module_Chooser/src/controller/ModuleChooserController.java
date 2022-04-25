@@ -134,14 +134,17 @@ public class ModuleChooserController {
 				cspPane.changeToRed3(false);
 				cspPane.changeToRed4(false);
 				cspPane.changeToRed5(false);
-				profilestring += String.format("%s%n", "PNumber: " + cspPane.getStudentPnumber());
-				profilestring += String.format("%s%n", "Name: " +
-						cspPane.getStudentName().getFirstName() + " " + cspPane.getStudentName().getFamilyName());
-				profilestring += String.format("%s%n", "Email: " + cspPane.getStudentEmail());
-				profilestring += String.format("%s%n", "Date: " + cspPane.getStudentDate());
-				profilestring += String.format("%s%n", "Course: " + cspPane.getSelectedCourse() + "\n");
+				// profilestring += String.format("%s%n", "PNumber: " +
+				// cspPane.getStudentPnumber() + "\n" + "Name: " +
+				// cspPane.getStudentName().getFirstName() + " " +
+				// cspPane.getStudentName().getFamilyName()
+				// + "\n" + "Email: " + cspPane.getStudentEmail() + "\n" + "Date: " +
+				// cspPane.getStudentDate()
+				// + "\n" + "Course: " + cspPane.getSelectedCourse() + "\n");
 
-				osPane.setProfile(profilestring);
+				osPane.setProfile(cspPane.getStudentPnumber(), cspPane.getStudentName(), cspPane.getStudentEmail(),
+						cspPane.getStudentDate(), cspPane.getSelectedCourse());
+
 				smPane.clearSelectedAll();
 				rmPane.reserveClearUnSelec();
 				for (Module m : cspPane.getSelectedCourse().getAllModulesOnCourse()) {
@@ -265,7 +268,7 @@ public class ModuleChooserController {
 									+ ", " + " Delivery: "
 									+ m.getDelivery().toString().replaceAll(m.getDelivery().toString(), "Term 1")
 									+ "\n");
-					osPane.setSelectModules(selectedmodules);
+					// osPane.setSelectModules(selectedmodules);
 				}
 
 				for (Module m : smPane.getTerm1selectedmodules()) {
@@ -277,7 +280,7 @@ public class ModuleChooserController {
 									+ ", " + " Delivery: "
 									+ m.getDelivery().toString().replaceAll(m.getDelivery().toString(), "Term 2")
 									+ "\n");
-					osPane.setSelectModules(selectedmodules);
+					// osPane.setSelectModules(selectedmodules);
 				}
 
 				for (Module m : smPane.getTerm2selectedmodules()) {
@@ -289,11 +292,11 @@ public class ModuleChooserController {
 									+ ", " + " Delivery: "
 									+ m.getDelivery().toString().replaceAll(m.getDelivery().toString(), "Year Long")
 									+ "\n");
-					osPane.setSelectModules(selectedmodules);
 				}
 
 				view.changeTab(2);
 			}
+			osPane.setSelectModules(selectedmodules);
 		}
 	}
 
@@ -402,8 +405,6 @@ public class ModuleChooserController {
 		}
 	}
 
-	String profilestring = "";
-
 	// Overview Pane
 	private class SaveButtonOWHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
@@ -444,6 +445,7 @@ public class ModuleChooserController {
 
 				model = new StudentProfile();
 
+				model.setStudentCourse(cspPane.getSelectedCourse());
 				model.setStudentPnumber(cspPane.getStudentPnumber());
 				model.setStudentName(cspPane.getStudentName());
 				model.setStudentEmail(cspPane.getStudentEmail());
@@ -487,10 +489,12 @@ public class ModuleChooserController {
 
 				model = (StudentProfile) ois.readObject();
 
+				cspPane.setSelectedCourse(model.getStudentCourse());
 				cspPane.setStudentPnumber(model.getStudentPnumber());
 				cspPane.setStudentName(model.getStudentName());
 				cspPane.setStudentEmail(model.getStudentEmail());
 				cspPane.setStudentDate(model.getSubmissionDate());
+
 				if (cspPane.getStudentPnumber().isEmpty() || cspPane.getStudentName().getFirstName().isEmpty()
 						|| cspPane.getStudentName().getFamilyName().isEmpty() || cspPane.getStudentEmail().isEmpty()
 						|| cspPane.getStudentDate() == null) {
@@ -531,20 +535,15 @@ public class ModuleChooserController {
 					cspPane.changeToRed3(false);
 					cspPane.changeToRed4(false);
 					cspPane.changeToRed5(false);
-					profilestring += String.format("%s%n", "PNumber: " + cspPane.getStudentPnumber());
-					profilestring += String.format("%s%n", "Name: " +
-							cspPane.getStudentName().getFirstName() + " " + cspPane.getStudentName().getFamilyName());
-					profilestring += String.format("%s%n", "Email: " + cspPane.getStudentEmail());
-					profilestring += String.format("%s%n", "Date: " + cspPane.getStudentDate());
-					profilestring += String.format("%s%n", "Course: " + cspPane.getSelectedCourse() + "\n");
-
-					osPane.setProfile(profilestring);
+				
+					osPane.setProfile(cspPane.getStudentPnumber(), cspPane.getStudentName(), cspPane.getStudentEmail(),
+							cspPane.getStudentDate(), cspPane.getSelectedCourse());
 					smPane.clearSelectedAll();
 					rmPane.reserveClearUnSelec();
 
 					cspPane.getSelectedCourse().getAllModulesOnCourse().removeAll(model.getAllSelectedModules());
 
-					//populate smp unselected
+					// populate smp unselected
 					for (Module m : cspPane.getSelectedCourse().getAllModulesOnCourse()) {
 
 						if (m.getDelivery() == Schedule.TERM_1) {
@@ -558,7 +557,7 @@ public class ModuleChooserController {
 						}
 					}
 
-					//populate smp selected
+					// populate smp selected
 					for (Module m : model.getAllSelectedModules()) {
 						if (m.getDelivery() == Schedule.TERM_1) {
 							smPane.populateSelectTerm1(m);
@@ -570,7 +569,7 @@ public class ModuleChooserController {
 						view.changeTab(1);
 					}
 
-					//check creds smp
+					// check creds smp
 					if (smPane.GetCredTerm1() < 60 || smPane.GetCredTerm2() < 60) {
 						alertDialogBuilder(AlertType.ERROR, "Error", "Not Enough Credits Selected",
 								"Please select modules for both terms of 60 credits each");
@@ -633,7 +632,7 @@ public class ModuleChooserController {
 								rmPane.reservePopulateSelectTerm1(m);
 								rmPane.updateCredT1(m.getModuleCredits());
 								rmPane.expandnext();
-							} else if(m.getDelivery() == Schedule.TERM_2){
+							} else if (m.getDelivery() == Schedule.TERM_2) {
 								rmPane.reservePopulateSelectTerm2(m);
 								rmPane.updateCredT2(m.getModuleCredits());
 							}
@@ -678,7 +677,7 @@ public class ModuleChooserController {
 					}
 
 					alertDialogBuilder(AlertType.INFORMATION, "Information Dialog", "Load success",
-							"Register loaded from registerObj.dat");
+							"Register loaded from file.dat");
 				}
 			} catch (IOException ioExcep) {
 				System.out.println("Error loading");

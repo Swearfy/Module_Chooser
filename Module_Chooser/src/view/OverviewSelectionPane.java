@@ -1,6 +1,7 @@
 package view;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -10,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import model.*;
 
 public class OverviewSelectionPane extends VBox implements Serializable {
 
@@ -74,27 +76,25 @@ public class OverviewSelectionPane extends VBox implements Serializable {
         return txt_resvdModules.getText();
     }
 
-    public void setProfile(String s) {
-        profile.setText("Student Profile \n========"+ "\n" + s);
+    public void setProfile(String pNumber, Name name, String email, LocalDate date, Course course) {
+        profile.setText(
+                "Student Profile \n========" + "\n" + "PNumber: " + pNumber + "\n" + "Name: " +
+                        name.getFirstName() + " " + name.getFamilyName()
+                        + "\n" + "Email: " + email + "\n" + "Date: " + date
+                        + "\n" + "Course: " + course + "\n");
     }
 
     public void setSelectModules(String s) {
-        txt_slcdModules.setText("Selected Modules \n========"+ "\n" + s);
+        txt_slcdModules.setText("Selected Modules \n=======" + "\n" + s);
+
     }
 
     public void setReserveModule(String s) {
-        txt_resvdModules.setText("Reserved Modules \n======="+ "\n" + s);
+        txt_resvdModules.setText("Reserved Modules \n=======" + "\n" + s);
     }
 
     public void saveBTN(EventHandler<ActionEvent> handler) {
         btn_save.setOnAction(handler);
     }
 
-
-    public void clearAll() {
-        profile.clear();
-        txt_slcdModules.clear();
-        txt_resvdModules.clear();
-
-    }
 }
