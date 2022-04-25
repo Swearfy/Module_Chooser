@@ -19,7 +19,6 @@ import view.CreateStudentProfilePane;
 import view.ModuleChooserMenuBar;
 
 public class ModuleChooserController {
-
 	// fields to be used throughout class
 	private ModuleChooserRootPane view;
 	private StudentProfile model;
@@ -134,17 +133,12 @@ public class ModuleChooserController {
 				cspPane.changeToRed3(false);
 				cspPane.changeToRed4(false);
 				cspPane.changeToRed5(false);
-				// profilestring += String.format("%s%n", "PNumber: " +
-				// cspPane.getStudentPnumber() + "\n" + "Name: " +
-				// cspPane.getStudentName().getFirstName() + " " +
-				// cspPane.getStudentName().getFamilyName()
-				// + "\n" + "Email: " + cspPane.getStudentEmail() + "\n" + "Date: " +
-				// cspPane.getStudentDate()
-				// + "\n" + "Course: " + cspPane.getSelectedCourse() + "\n");
 
 				osPane.setProfile(cspPane.getStudentPnumber(), cspPane.getStudentName(), cspPane.getStudentEmail(),
 						cspPane.getStudentDate(), cspPane.getSelectedCourse());
 
+				osPane.clearSelectModules();
+				osPane.clearReserveModule();
 				smPane.clearSelectedAll();
 				rmPane.reserveClearUnSelec();
 				for (Module m : cspPane.getSelectedCourse().getAllModulesOnCourse()) {
@@ -243,11 +237,11 @@ public class ModuleChooserController {
 		}
 	}
 
-	String selectedmodules = "";
-
 	private class smPaneSubmitModulesHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
 			rmPane.reserveClearUnSelec();
+			rmPane.expandprevious();
+			osPane.clearReserveModule();
 			if (smPane.GetCredTerm1() < 60 || smPane.GetCredTerm2() < 60) {
 				alertDialogBuilder(AlertType.ERROR, "Error", "Not Enough Credits Selected",
 						"Please select modules for both terms of 60 credits each");
@@ -258,6 +252,7 @@ public class ModuleChooserController {
 				for (Module m : smPane.getTerm2UnselectedLeftOver()) {
 					rmPane.rmpPopulateUnSlctTerm2(m);
 				}
+				String selectedmodules = "";
 
 				for (Module m : smPane.getYearLongselectedmodules()) {
 					String truefalse = m.isMandatory() ? "yes" : "no";
@@ -268,7 +263,6 @@ public class ModuleChooserController {
 									+ ", " + " Delivery: "
 									+ m.getDelivery().toString().replaceAll(m.getDelivery().toString(), "Term 1")
 									+ "\n");
-					// osPane.setSelectModules(selectedmodules);
 				}
 
 				for (Module m : smPane.getTerm1selectedmodules()) {
@@ -280,7 +274,6 @@ public class ModuleChooserController {
 									+ ", " + " Delivery: "
 									+ m.getDelivery().toString().replaceAll(m.getDelivery().toString(), "Term 2")
 									+ "\n");
-					// osPane.setSelectModules(selectedmodules);
 				}
 
 				for (Module m : smPane.getTerm2selectedmodules()) {
@@ -294,9 +287,9 @@ public class ModuleChooserController {
 									+ "\n");
 				}
 
+				osPane.setSelectModules(selectedmodules);
 				view.changeTab(2);
 			}
-			osPane.setSelectModules(selectedmodules);
 		}
 	}
 
@@ -342,6 +335,8 @@ public class ModuleChooserController {
 						"Please Select an non mandatory module to remove");
 			} else if (rmPane.getRmpTerm1select() != null) {
 				Module m = rmPane.getRmpTerm1select();
+				osPane.clearReserveModule();
+				rmPane.expandprevious();
 				rmPane.removeTerm1rmp(m);
 				rmPane.addTerm1Unselecrmp(m);
 				rmPane.DecremUpdateCredTerm1(m.getModuleCredits());
@@ -358,14 +353,13 @@ public class ModuleChooserController {
 						"Please Select an non mandatory module to remove");
 			} else if (rmPane.getRmpTerm2select() != null) {
 				Module m = rmPane.getRmpTerm2select();
+				osPane.clearReserveModule();
 				rmPane.removeTerm2rmp(m);
 				rmPane.addTerm2Unselecrmp(m);
 				rmPane.DecremUpdateCredTerm2(m.getModuleCredits());
 			}
 		}
 	}
-
-	String reservemodules = "";
 
 	private class rmPaneConfirmTerm1ModulesHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
@@ -374,20 +368,21 @@ public class ModuleChooserController {
 						"Please select modules for both terms of 30 credits each");
 			} else if (rmPane.getCTerm1() == 30) {
 				rmPane.expandnext();
-				for (Module m : rmPane.getTerm1selected()) {
-					reservemodules += String.format("%s%n",
-							"Module code: " + m.getModuleCode() + " Module name: " + m.getModuleName() + " Credits: "
-									+ m.getModuleCredits() + " Delivery: "
-									+ m.getDelivery().toString().replaceAll(m.getDelivery().toString(), "Term 1")
-									+ "\n");
-					osPane.setReserveModule(reservemodules);
-				}
 			}
 		}
 	}
 
 	private class rmPaneConfirmTerm2ModulesHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
+			String reservemodules = "";
+			for (Module m : rmPane.getTerm1selected()) {
+				reservemodules += String.format("%s%n",
+						"Module code: " + m.getModuleCode() + " Module name: " + m.getModuleName() + " Credits: "
+								+ m.getModuleCredits() + " Delivery: "
+								+ m.getDelivery().toString().replaceAll(m.getDelivery().toString(), "Term 1")
+								+ "\n");
+				osPane.setReserveModule(reservemodules);
+			}
 			if (rmPane.getCTerm2() < 30) {
 				alertDialogBuilder(AlertType.ERROR, "Error", "Not Enough Credits Selected",
 						"Please select modules for both terms of 30 credits each");
@@ -484,7 +479,6 @@ public class ModuleChooserController {
 	private class LoadMenuHandler implements EventHandler<ActionEvent> {
 
 		public void handle(ActionEvent e) {
-
 			try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("file.dat"));) {
 
 				model = (StudentProfile) ois.readObject();
@@ -535,7 +529,7 @@ public class ModuleChooserController {
 					cspPane.changeToRed3(false);
 					cspPane.changeToRed4(false);
 					cspPane.changeToRed5(false);
-				
+
 					osPane.setProfile(cspPane.getStudentPnumber(), cspPane.getStudentName(), cspPane.getStudentEmail(),
 							cspPane.getStudentDate(), cspPane.getSelectedCourse());
 					smPane.clearSelectedAll();
@@ -574,6 +568,8 @@ public class ModuleChooserController {
 						alertDialogBuilder(AlertType.ERROR, "Error", "Not Enough Credits Selected",
 								"Please select modules for both terms of 60 credits each");
 					} else if (smPane.GetCredTerm1() == 60 && smPane.GetCredTerm2() == 60) {
+						String selectedmodules = "";
+
 						for (Module m : smPane.getYearLongselectedmodules()) {
 							String truefalse = m.isMandatory() ? "yes" : "no";
 							selectedmodules += String.format("%s%n",
@@ -585,7 +581,6 @@ public class ModuleChooserController {
 											+ m.getDelivery().toString().replaceAll(m.getDelivery().toString(),
 													"Term 1")
 											+ "\n");
-							osPane.setSelectModules(selectedmodules);
 						}
 
 						for (Module m : smPane.getTerm1selectedmodules()) {
@@ -599,7 +594,6 @@ public class ModuleChooserController {
 											+ m.getDelivery().toString().replaceAll(m.getDelivery().toString(),
 													"Term 2")
 											+ "\n");
-							osPane.setSelectModules(selectedmodules);
 						}
 
 						for (Module m : smPane.getTerm2selectedmodules()) {
@@ -613,8 +607,8 @@ public class ModuleChooserController {
 											+ m.getDelivery().toString().replaceAll(m.getDelivery().toString(),
 													"Year Long")
 											+ "\n");
-							osPane.setSelectModules(selectedmodules);
 						}
+						osPane.setSelectModules(selectedmodules);
 						view.changeTab(2);
 
 						smPane.getTerm1UnselectedLeftOver().removeAll(model.getAllReservedModules());
@@ -640,6 +634,7 @@ public class ModuleChooserController {
 					}
 
 					// check term 1 reserve
+					String reservemodules = "";
 
 					if (rmPane.getCTerm1() < 30) {
 						alertDialogBuilder(AlertType.ERROR, "Error", "Not Enough Credits Selected",
