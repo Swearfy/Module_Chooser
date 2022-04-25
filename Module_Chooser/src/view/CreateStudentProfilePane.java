@@ -94,6 +94,16 @@ public class CreateStudentProfilePane extends GridPane implements Serializable {
 		return cboCourses.getSelectionModel().getSelectedItem();
 	}
 
+	public void setSelectedCourse(Course d) {
+		if (d.getCourseName().equals("Computer Science")) {
+			cboCourses.getSelectionModel().select(0);
+		} else if (d.getCourseName().equals("Software Engineering")) {
+			cboCourses.getSelectionModel().select(1);
+		} else {
+			cboCourses.getSelectionModel().select(0);
+		}
+	}
+
 	public String getStudentPnumber() {
 		return txtPnumber.getText();
 	}
@@ -168,6 +178,7 @@ public class CreateStudentProfilePane extends GridPane implements Serializable {
 	}
 
 	public void clearALLCSPp() {
+		cboCourses.getSelectionModel().clearSelection();
 		txtPnumber.setStyle("");
 		txtFirstName.setStyle("");
 		txtSurname.setStyle("");
