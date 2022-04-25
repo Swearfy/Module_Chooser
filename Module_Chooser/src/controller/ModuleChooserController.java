@@ -212,6 +212,9 @@ public class ModuleChooserController {
 						"Please Select an non mandatory module to remove");
 			} else if (smPane.getTerm1Selection() != null) {
 				Module m = smPane.getTerm1Selection();
+				osPane.clearReserveModule();
+				osPane.clearSelectModules();
+				rmPane.expandprevious();
 				smPane.RemoveTerm1Selection(m);
 				smPane.AddTerm1UnSelection(m);
 				smPane.DecremUpdateCredTerm1(m.getModuleCredits());
@@ -229,6 +232,9 @@ public class ModuleChooserController {
 						"Please Select an non mandatory module to remove");
 			} else if (smPane.getTerm2Selection() != null) {
 				Module m = smPane.getTerm2Selection();
+				osPane.clearReserveModule();
+				osPane.clearSelectModules();
+				rmPane.expandprevious();
 				smPane.RemoveTerm2Selection(m);
 				smPane.AddTerm2UnSelection(m);
 				smPane.DecremUpdateCredTerm2(m.getModuleCredits());
