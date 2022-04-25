@@ -427,7 +427,7 @@ public class ModuleChooserController {
 	private class AboutButtonHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
 			alertDialogBuilder(AlertType.INFORMATION, "Information Dialog", null,
-					"Enter your details then press create to be able to select modules for third year . \n Once you complete you can save the progress you done or the final text file.");
+					"Enter your details then press create to be able to select modules for third year.\nOnce you complete you can save the progress you done or the final text file.");
 		}
 	}
 
@@ -468,7 +468,7 @@ public class ModuleChooserController {
 				oos.flush();
 
 				alertDialogBuilder(AlertType.INFORMATION, "Information Dialog", "Save success",
-						"Register saved to file.dat");
+						"File saved to file.dat");
 			} catch (IOException ioExcep) {
 				System.out.println("Error saving");
 				ioExcep.printStackTrace();
@@ -672,7 +672,7 @@ public class ModuleChooserController {
 					}
 
 					alertDialogBuilder(AlertType.INFORMATION, "Information Dialog", "Load success",
-							"Register loaded from file.dat");
+							"File loaded from file.dat");
 				}
 			} catch (IOException ioExcep) {
 				System.out.println("Error loading");
