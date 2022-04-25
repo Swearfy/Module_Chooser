@@ -93,6 +93,15 @@ public class OverviewSelectionPane extends VBox implements Serializable {
         txt_resvdModules.setText("Reserved Modules \n=======" + "\n" + s);
     }
 
+
+    public void clearSelectModules() {
+        txt_slcdModules.clear();
+    }
+    public void clearReserveModule() {
+        txt_resvdModules.clear();
+    }
+
+
     public void saveBTN(EventHandler<ActionEvent> handler) {
         btn_save.setOnAction(handler);
     }
