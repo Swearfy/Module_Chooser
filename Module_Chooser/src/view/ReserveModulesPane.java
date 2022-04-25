@@ -170,6 +170,8 @@ public class ReserveModulesPane extends VBox implements Serializable {
     public void reserveClearUnSelec() {
         CredT1 = 0;
         CredT2 = 0;
+        CTerm1.setText(String.valueOf(CredT1));
+        CTerm2.setText(String.valueOf(CredT2));
 
         txtfld_ReservTerm1.getItems().clear();
         txtfld_ReservTerm2.getItems().clear();
@@ -268,6 +270,11 @@ public class ReserveModulesPane extends VBox implements Serializable {
     public void expandnext() {
         tpanel2.setVisible(true);
         mainAcord.setExpandedPane(tpanel2);
+    }
+    public void expandprevious() {
+        tpanel2.setVisible(false);
+        mainAcord.setExpandedPane(tpanel1);
+
     }
 
     // Substract credits
