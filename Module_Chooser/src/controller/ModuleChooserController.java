@@ -1,6 +1,10 @@
 package controller;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+import java.util.jar.Attributes.Name;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -43,10 +47,12 @@ public class ModuleChooserController {
 
 		// add courses to combobox in create student profile pane using the
 		// generateAndGetCourses helper method below
-		cspPane.addCoursesToComboBox(generateAndGetCourses());
+		cspPane.addCoursesToComboBox(generateCourse());
 		// attach event handlers to view using private helper method
 
 		this.attachEventHandlers();
+		this.generateCourse();
+
 	}
 
 	// helper method - used to attach event handlers
@@ -688,6 +694,93 @@ public class ModuleChooserController {
 		}
 	}
 
+	Schedule delivery;
+	private Course[] generateCourse() {
+		List<Module> compsc = new ArrayList<Module>();
+		List<Module> softeg = new ArrayList<Module>();
+
+		Course compSci = new Course("Computer Science");
+		Course softEng = new Course("Software Engineering");
+
+		try {
+
+			Scanner sc = new Scanner(new File("computerscience.txt"));
+			Scanner sc2 = new Scanner(new File("softwareengineering.txt"));
+
+			while (sc.hasNext()) {
+				String module = sc.nextLine();
+				Scanner scr = new Scanner(module);
+
+				scr.useDelimiter(",");
+				String moduleCode = scr.next();
+				String modulename = scr.next();
+				int moduleCredits = scr.nextInt();
+				boolean mandatory = scr.nextBoolean();
+				String sdelivery = scr.next();
+
+				if (sdelivery.equals("TERM_1")) {
+
+					delivery = Schedule.TERM_1;
+				} else if (sdelivery.equals("TERM_2")) {
+					delivery = Schedule.TERM_2;
+				} else {
+					delivery = Schedule.YEAR_LONG;
+				}
+
+				compsc.add(new Module(moduleCode, modulename, moduleCredits, mandatory, delivery));
+
+				scr.close();
+			}
+
+			while (sc2.hasNext()) {
+				String module = sc2.nextLine();
+				Scanner scr = new Scanner(module);
+
+				scr.useDelimiter(",");
+				String moduleCode = scr.next();
+				String modulename = scr.next();
+				int moduleCredits = scr.nextInt();
+				boolean mandatory = scr.nextBoolean();
+				String sdelivery = scr.next();
+
+				if (sdelivery.equals("TERM_1")) {
+
+					delivery = Schedule.TERM_1;
+				} else if (sdelivery.equals("TERM_2")) {
+					delivery = Schedule.TERM_2;
+				} else {
+					delivery = Schedule.YEAR_LONG;
+				}
+
+				softeg.add(new Module(moduleCode, modulename, moduleCredits, mandatory, delivery));
+
+				scr.close();
+			}
+
+
+			for (Module module : compsc) {
+				compSci.addModuleToCourse(module);
+			}
+
+			for (Module module : softeg) {
+				softEng.addModuleToCourse(module);
+			}
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+
+
+		Course[] courses = new Course[2];
+		courses[0] = compSci;
+		courses[1] = softEng;
+
+		return courses;
+
+	}
+
+	
+	// original method not used anymore replace on combobox if loading from file is not working
 	// helper method - generates course and module data and returns courses within
 	// an array
 	private Course[] generateAndGetCourses() {

@@ -1,0 +1,17 @@
+IMAT3423,Systems Building: Methods,15,true,TERM_1
+CTEC3451,Development Project,30,true,YEAR_LONG
+CTEC3902,Rigorous Systems,15,false,TERM_2
+CTEC3110,Secure Web Application Development,15,false,TERM_1
+CTEC3605,Multi-service Networks 1,15,false,TERM_1
+CTEC3606,Multi-service Networks 2,15,false,TERM_2
+CTEC3410,Web Application Penetration Testing,15,false,TERM_2
+CTEC3904,Functional Software Development,15,false,TERM_2
+CTEC3905,Front-End Web Development,15,false,TERM_2
+CTEC3906,Interaction Design,15,false,TERM_1
+CTEC3911,Mobile Application Development,15,false,TERM_1
+IMAT3104,Database Management and Programming,15,false,TERM_2
+IMAT3406,Fuzzy Logic and Knowledge Based Systems,15,false,TERM_1
+IMAT3611,Computer Ethics and Privacy,15,false,TERM_1
+IMAT3613,Data Mining,15,false,TERM_1
+IMAT3614,Big Data and Business Models,15,false,TERM_2
+IMAT3428,Information Technology Services Practice,15,false,TERM_2
